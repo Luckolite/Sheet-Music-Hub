@@ -15,20 +15,29 @@ Sheet Interpreter:
 - Help generate play-along tracks for your locked/stay-cached sheets
 - Process pages on your PC, then sync the results back to Music Sheets
 - View the processing queue and retry pages that need attention
+- Pause processing and choose up to five desktop workers from the app's Hub panel
+- Recognize independent quarter and half rests beside notes, including dotted rests and curved staves
 
 Downloads:
 
-Windows builds will be available under [Releases](https://github.com/Luckolite/Sheet-Music-Hub/releases). No Windows build has been published here yet.
+[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.130**
+
+The ZIP includes the Hub and its matching sheet processor. Extract the whole ZIP and keep the `MusicSheetsNativePage` folder beside the EXE.
 
 Getting started:
 1. Use a 64-bit Windows PC with Music Sheets on your Android device.
-2. Download and open the hub on your PC when a release is available.
+2. Extract the download and open **Music Sheets Sync Hub.exe**.
 3. In Music Sheets, open **Syncing → Library Sync** and choose a pairing password.
 4. Enter the same password in the hub. It needs at least 6 characters.
 5. Choose **Save & start syncing**. Allow private-network access if Windows asks.
 6. Keep your PC and devices on the same local network, then open Music Sheets to sync.
 
 Closing the hub window keeps it running in the system tray. Right-click its icon to reopen it or exit completely. Leave your PC awake if you want the hub available for syncing and processing.
+
+Updating:
+- Exit the old Hub from the system tray.
+- Replace the EXE and `MusicSheetsNativePage` folder together.
+- Keep your existing library and settings.
 
 Your library:
 - Files stay on your PC and paired devices. No cloud account or internet relay is needed.
