@@ -1,6 +1,6 @@
 # Music Sheets Hub
 
-Optional Windows hub for Music Sheets. Keep a copy of your library on your PC, sync devices, and help process sheet interpretations on your locked/stay-cached sheets.
+Optional Windows hub for Music Sheets android app. Keep a copy of your library on your PC, sync devices, and help process sheet interpretations on your locked/stay-cached sheets.
 
 General support:
 - Easy 🔄 synchronization across devices on the same local network
