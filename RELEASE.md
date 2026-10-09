@@ -1,9 +1,9 @@
-Music Sheets Hub 1.6.137
+Music Sheets Hub 1.6.138
 
-- Windows 64-bit Hub with the matching sheet processor.
-- Holds guitar tab ties across measures, systems, and pages.
-- Keeps hammer-ons, pull-offs, and tapping attacks separate.
-- 50 Hub checks and the three-page processing test passed.
+- Improves guitar tab triplet and dotted-rest timing.
+- Keeps rhythm labels separate from technique marks and places trailing vibrato on the ending fret.
+- Corrects supported tuning headers with split accidentals and explicit octaves.
+- Includes the matching Windows 64-bit Hub and sheet processor.
 
 Extract the whole ZIP, then open **Music Sheets Sync Hub.exe**. Keep the `MusicSheetsNativePage` folder beside it.
 

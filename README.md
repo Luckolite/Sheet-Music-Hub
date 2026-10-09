@@ -19,10 +19,15 @@ Sheet Interpreter:
 - Pause processing and choose up to five desktop workers from the app's Hub panel
 - Recognize independent quarter, eighth, and half rests beside notes, including dotted rests and curved staves
 - Hold guitar tab ties across measures, systems, and pages while keeping hammer-ons and pull-offs as attacks
+- Keep guitar tab triplets and dotted rests on time
+- Distinguish rhythm labels from technique marks, and place trailing vibrato on the ending fret
+- Read supported alternate tunings with split sharp/flat glyphs and explicit octaves
+
+[Sheet processing details](docs/sheet-processing.md)
 
 Downloads:
 
-[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.137**
+[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.138**
 
 The ZIP includes the Hub and its matching sheet processor. Extract the whole ZIP and keep the `MusicSheetsNativePage` folder beside the EXE.
 

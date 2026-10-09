@@ -1,0 +1,19 @@
+Music Sheets Hub 1.6.138
+
+This update improves guitar tab timing, technique marks, and supported tunings.
+
+Windows 64-bit. Extract the whole ZIP, then open Music Sheets Sync Hub.exe.
+Keep MusicSheetsNativePage beside the EXE. It handles desktop sheet processing.
+
+In Music Sheets, open Syncing > Library Sync and enable syncing.
+Choose Pair with a friend using a code and enter the same generated code on your devices and in the Hub.
+Google linking needs a separately configured desktop OAuth client. Once configured, link the same Google account on your devices and in the Hub.
+In the Hub, choose Save & start syncing.
+Keep your PC and devices on the same local network.
+
+Closing the window keeps the Hub running in the system tray.
+To update, exit the old Hub and replace the EXE and worker folder together.
+Keep your existing library and settings.
+
+Third-party notices are included under Notices and in the worker runtime.
+Interpreter source: https://github.com/Luckolite/Sheet-Music-Interpreter/tree/8825b66c9d6db4ebdee6e561e97adbfdf8d16cf9
