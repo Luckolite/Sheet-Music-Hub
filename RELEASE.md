@@ -1,9 +1,7 @@
-Music Sheets Hub 1.6.138
+Music Sheets Hub 1.6.139
 
-- Improves guitar tab triplet and dotted-rest timing.
-- Keeps rhythm labels separate from technique marks and places trailing vibrato on the ending fret.
-- Corrects supported tuning headers with split accidentals and explicit octaves.
-- Includes the matching Windows 64-bit Hub and sheet processor.
+- Saves generated play-along audio through an individual staging file, preserving the previous playable file if replacement fails.
+- Includes the matching Windows 64-bit Hub, sheet processor, and playback engine for Music Sheets 1.18.471.
 
 Extract the whole ZIP, then open **Music Sheets Sync Hub.exe**. Keep the `MusicSheetsNativePage` folder beside it.
 
