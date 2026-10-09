@@ -6,6 +6,7 @@ General support:
 - Easy 🔄 synchronization across devices on the same local network
 - A PC copy of your sheets, images, tracks, and practice recordings
 - Sync custom instruments, annotations, page scrolling settings, profiles, and tags
+- Sync original videos and video-page metadata between updated devices
 - Your phone and tablet can sync at different times while the hub stays running
 - Choose where your library is stored
 - Optional startup with Windows, with the hub running in the system tray
@@ -20,7 +21,7 @@ Sheet Interpreter:
 
 Downloads:
 
-[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.131**
+[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.132**
 
 The ZIP includes the Hub and its matching sheet processor. Extract the whole ZIP and keep the `MusicSheetsNativePage` folder beside the EXE.
 
