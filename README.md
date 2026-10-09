@@ -27,8 +27,8 @@ The ZIP includes the Hub and its matching sheet processor. Extract the whole ZIP
 Getting started:
 1. Use a 64-bit Windows PC with Music Sheets on your Android device.
 2. Extract the download and open **Music Sheets Sync Hub.exe**.
-3. In Music Sheets, open **Syncing → Library Sync** and choose a pairing password.
-4. Enter the same password in the hub. It needs at least 6 characters.
+3. In Music Sheets, open **Syncing → Library Sync** and enable syncing.
+4. Choose **Link Google account** on your devices and in the Hub, using the same account. Or choose **Pair with a friend using a code** and enter the same generated code.
 5. Choose **Save & start syncing**. Allow private-network access if Windows asks.
 6. Keep your PC and devices on the same local network, then open Music Sheets to sync.
 
@@ -40,11 +40,11 @@ Updating:
 - Keep your existing library and settings.
 
 Your library:
-- Files stay on your PC and paired devices. No cloud account or internet relay is needed.
-- The hub saves a pairing token rather than your password. Transfers use your local network and are not encrypted, so use a trusted network.
+- Your library transfers between your PC and paired devices over the local network.
+- Google stores your private pairing key, not your library. Friend codes are an alternative to Google linking.
 - Deletions sync too. Keep a separate backup of anything you want to preserve.
 - Google Play manages updates to the Android Play app. The hub syncs your library and processing results.
 
-If syncing isn't working, check the pairing password, local network, and Windows private-network firewall access. Keep the hub running and Music Sheets open while checking.
+If syncing isn't working, check the linked Google account or friend code, local network, and Windows private-network firewall access. Keep the hub running and Music Sheets open while checking.
 
 [Music Sheets](https://github.com/Luckolite/Music-Sheets) · [Report a problem](https://github.com/Luckolite/Sheet-Music-Hub/issues) · [Privacy information](https://gist.github.com/Luckolite/5efe72d4c37524b2a18070bfd5f97fc7)
