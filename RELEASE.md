@@ -1,9 +1,9 @@
-Music Sheets Hub 1.6.132
+Music Sheets Hub 1.6.137
 
 - Windows 64-bit Hub with the matching sheet processor.
-- Stores and relays playable video pages from Music Sheets 1.18.456, including videos retained in deleted-page history.
-- Older devices continue receiving ordinary sheet state.
-- 48 Hub checks and the three-page processing test passed.
+- Holds guitar tab ties across measures, systems, and pages.
+- Keeps hammer-ons, pull-offs, and tapping attacks separate.
+- 50 Hub checks and the three-page processing test passed.
 
 Extract the whole ZIP, then open **Music Sheets Sync Hub.exe**. Keep the `MusicSheetsNativePage` folder beside it.
 

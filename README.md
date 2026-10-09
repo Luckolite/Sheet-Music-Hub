@@ -18,10 +18,11 @@ Sheet Interpreter:
 - View the processing queue and retry pages that need attention
 - Pause processing and choose up to five desktop workers from the app's Hub panel
 - Recognize independent quarter, eighth, and half rests beside notes, including dotted rests and curved staves
+- Hold guitar tab ties across measures, systems, and pages while keeping hammer-ons and pull-offs as attacks
 
 Downloads:
 
-[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.132**
+[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.137**
 
 The ZIP includes the Hub and its matching sheet processor. Extract the whole ZIP and keep the `MusicSheetsNativePage` folder beside the EXE.
 
@@ -34,6 +35,8 @@ Getting started:
 6. Keep your PC and devices on the same local network, then open Music Sheets to sync.
 
 Closing the hub window keeps it running in the system tray. Right-click its icon to reopen it or exit completely. Leave your PC awake if you want the hub available for syncing and processing.
+
+Google linking needs a separately configured desktop OAuth client. Friend-code pairing works without it.
 
 Updating:
 - Exit the old Hub from the system tray.
