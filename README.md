@@ -16,11 +16,11 @@ Sheet Interpreter:
 - Process pages on your PC, then sync the results back to Music Sheets
 - View the processing queue and retry pages that need attention
 - Pause processing and choose up to five desktop workers from the app's Hub panel
-- Recognize independent quarter and half rests beside notes, including dotted rests and curved staves
+- Recognize independent quarter, eighth, and half rests beside notes, including dotted rests and curved staves
 
 Downloads:
 
-[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.130**
+[Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.131**
 
 The ZIP includes the Hub and its matching sheet processor. Extract the whole ZIP and keep the `MusicSheetsNativePage` folder beside the EXE.
 
