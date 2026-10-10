@@ -1,7 +1,7 @@
-Music Sheets Hub 1.6.139
+Music Sheets Hub 1.6.140
 
-- Saves generated play-along audio through an individual staging file, preserving the previous playable file if replacement fails.
-- Includes the matching Windows 64-bit Hub, sheet processor, and playback engine for Music Sheets 1.18.471.
+- Includes the matching Windows 64-bit Hub, sheet processor, and playback engine for Music Sheets 1.18.472.
+- The Android update prevents overlapping inference resources after incomplete startup cleanup.
 
 Extract the whole ZIP, then open **Music Sheets Sync Hub.exe**. Keep the `MusicSheetsNativePage` folder beside it.
 
