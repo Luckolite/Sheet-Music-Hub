@@ -4,6 +4,8 @@ The Hub processes queued pages on your PC and syncs the results back to Music Sh
 The download includes its matching processor; keep `MusicSheetsNativePage` beside the EXE.
 From the app's Hub panel, pause processing, choose up to five workers, or retry pages.
 
+Version 1.6.146 corrects missed triplets in dense printed passages. Nearby notes on separate stems no longer override the written beam count. This update pairs with Music Sheets 1.18.481 and recognition revision 29; older cached recognition is regenerated when requested.
+
 Version 1.6.138 improves guitar tab interpretation:
 
 - Triplets count rhythmic onset columns, so a chord or muted strum uses one slot. Dotted rests keep their written duration.
