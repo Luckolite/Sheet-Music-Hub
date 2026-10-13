@@ -1,0 +1,1171 @@
+--- a/build/cmake/GetPlatformInfo.cmake
++++ b/build/cmake/GetPlatformInfo.cmake
+@@ -1,12 +1,24 @@
+ 
+-if(${CMAKE_CXX_COMPILER} MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$")
++
++if(EMSCRIPTEN OR CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
++
+     set(OS_IS_WASM 1)
++
+ elseif(${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
++
+     set(OS_IS_WIN 1)
++
+ elseif(${CMAKE_HOST_SYSTEM_NAME} MATCHES "Linux")
++
+     set(OS_IS_LIN 1)
++
+ elseif(${CMAKE_HOST_SYSTEM_NAME} MATCHES "Darwin")
++
+     set(OS_IS_MAC 1)
++
+ else()
++
+     message(FATAL_ERROR "Unsupported platform: ${CMAKE_HOST_SYSTEM_NAME}")
++
+ endif()
++
+--- a/src/engraving/libmscore/chord.cpp
++++ b/src/engraving/libmscore/chord.cpp
+@@ -308,6 +308,9 @@
+     _stemSlash     = 0;
+     _tremolo       = 0;
+ 
++    _sourceGraceSlash = c._sourceGraceSlash;
++    _graceStealPrevious = c._graceStealPrevious;
++    _graceStealFollowing = c._graceStealFollowing;
+     _graceIndex     = c._graceIndex;
+     _noStem         = c._noStem;
+     _playEventType  = c._playEventType;
+@@ -1167,6 +1170,9 @@
+     writeBeam(xml);
+     xml.startElement(this);
+     ChordRest::writeProperties(xml);
++    if (_sourceGraceSlash) { xml.tag("sourceGraceSlash", 1); }
++    if (_graceStealPrevious >= 0.0) { xml.tag("graceStealPrevious", _graceStealPrevious); }
++    if (_graceStealFollowing >= 0.0) { xml.tag("graceStealFollowing", _graceStealFollowing); }
+     for (const Articulation* a : _articulations) {
+         a->write(xml);
+     }
+@@ -1273,6 +1279,12 @@
+         _hook = new Hook(this);
+         _hook->read(e);
+         add(_hook);
++    } else if (tag == "sourceGraceSlash") {
++        _sourceGraceSlash = e.readInt() != 0;
++    } else if (tag == "graceStealPrevious") {
++        setGraceStealPrevious(e.readDouble());
++    } else if (tag == "graceStealFollowing") {
++        setGraceStealFollowing(e.readDouble());
+     } else if (tag == "appoggiatura") {
+         _noteType = NoteType::APPOGGIATURA;
+         e.readNext();
+@@ -1858,7 +1870,7 @@
+     }
+ 
+     // Add Stem slash
+-    if ((_noteType == NoteType::ACCIACCATURA) && !(beam() && beam()->elements().front() != this)) {
++    if ((_noteType == NoteType::ACCIACCATURA || _sourceGraceSlash) && !(beam() && beam()->elements().front() != this)) {
+         if (!_stemSlash) {
+             add(Factory::createStemSlash(this));
+         }
+@@ -3396,6 +3408,9 @@
+ void Chord::toGraceAfter()
+ {
+     switch (noteType()) {
++    case NoteType::ACCIACCATURA: _sourceGraceSlash = true;
++        setNoteType(NoteType::GRACE8_AFTER);
++        break;
+     case NoteType::APPOGGIATURA:  setNoteType(NoteType::GRACE8_AFTER);
+         break;
+     case NoteType::GRACE16:       setNoteType(NoteType::GRACE16_AFTER);
+--- a/src/engraving/libmscore/chord.h
++++ b/src/engraving/libmscore/chord.h
+@@ -106,6 +106,10 @@
+     std::vector<Chord*> _graceNotes; // storage for all grace notes
+     mutable GraceNotesGroup _graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
+     mutable GraceNotesGroup _graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
++    // MusicXML percentages; -1 preserves native defaults when unspecified.
++    bool _sourceGraceSlash = false;
++    double _graceStealPrevious = -1.0;
++    double _graceStealFollowing = -1.0;
+     size_t _graceIndex;                     ///< if this is a grace note, index in parent list
+ 
+     DirectionV _stemDirection;
+@@ -259,6 +263,12 @@
+     GraceNotesGroup& graceNotesBefore() const;
+     GraceNotesGroup& graceNotesAfter() const;
+ 
++    bool sourceGraceSlash() const { return _sourceGraceSlash; }
++    void setSourceGraceSlash(bool value) { _sourceGraceSlash = value; }
++    double graceStealPrevious() const { return _graceStealPrevious; }
++    double graceStealFollowing() const { return _graceStealFollowing; }
++    void setGraceStealPrevious(double value) { _graceStealPrevious = value >= 0.0 && value <= 100.0 ? value : -1.0; }
++    void setGraceStealFollowing(double value) { _graceStealFollowing = value >= 0.0 && value <= 100.0 ? value : -1.0; }
+     size_t graceIndex() const { return _graceIndex; }
+     void setGraceIndex(size_t val) { _graceIndex = val; }
+ 
+--- a/src/engraving/libmscore/figuredbass.cpp
++++ b/src/engraving/libmscore/figuredbass.cpp
+@@ -21,6 +21,7 @@
+  */
+ 
+ #include "figuredbass.h"
++#include "types/musicxmltimegrid.h"
+ 
+ #include "io/file.h"
+ 
+@@ -1789,7 +1790,8 @@
+         item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
+     }
+     if (writeDuration) {
+-        xml.tag("duration", ticks().ticks() / divisions);
++        const Fraction duration = ticks().reduced();
++        xml.tag("duration", mu::engraving::musicxml::exactUnits(duration.numerator(), duration.denominator(), divisions));
+     }
+     xml.endElement();
+ }
+--- a/src/engraving/libmscore/hairpin.cpp
++++ b/src/engraving/libmscore/hairpin.cpp
+@@ -724,6 +724,9 @@
+     }
+     xml.startElement(this);
+     xml.tag("subtype", int(_hairpinType));
++    if (_sourceMusicXmlNumber >= 1 && _sourceMusicXmlNumber <= 16) {
++        xml.tag("sourceMusicXmlNumber", _sourceMusicXmlNumber);
++    }
+     writeProperty(xml, Pid::VELO_CHANGE);
+     writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
+     writeProperty(xml, Pid::DYNAMIC_RANGE);
+@@ -750,11 +753,14 @@
+ void Hairpin::read(XmlReader& e)
+ {
+     eraseSpannerSegments();
++    _sourceMusicXmlNumber = -1;
+ 
+     while (e.readNextStartElement()) {
+         const AsciiStringView tag(e.name());
+         if (tag == "subtype") {
+             setHairpinType(HairpinType(e.readInt()));
++        } else if (tag == "sourceMusicXmlNumber") {
++            setSourceMusicXmlNumber(e.readInt());
+         } else if (readStyledProperty(e, tag)) {
+         } else if (tag == "hairpinCircledTip") {
+             _hairpinCircledTip = e.readInt();
+--- a/src/engraving/libmscore/hairpin.h
++++ b/src/engraving/libmscore/hairpin.h
+@@ -92,6 +92,7 @@
+ 
+     HairpinType _hairpinType { HairpinType::INVALID };
+     int _veloChange;
++    int _sourceMusicXmlNumber { -1 };
+     bool _hairpinCircledTip;
+     DynamicRange _dynRange;
+     bool _singleNoteDynamics;
+@@ -110,6 +111,9 @@
+     int subtype() const override;
+ 
+     DynamicType dynamicTypeFrom() const;
++
++    int sourceMusicXmlNumber() const { return _sourceMusicXmlNumber; }
++    void setSourceMusicXmlNumber(int value) { _sourceMusicXmlNumber = value >= 1 && value <= 16 ? value : -1; }
+     DynamicType dynamicTypeTo() const;
+ 
+     HairpinType hairpinType() const { return _hairpinType; }
+--- a/src/engraving/libmscore/line.cpp
++++ b/src/engraving/libmscore/line.cpp
+@@ -845,6 +845,34 @@
+ 
+ PointF SLine::linePos(Grip grip, System** sys) const
+ {
++    // Hairpins can start or stop between rhythmic events without splitting them.
++    if (isHairpin() && anchor() == Spanner::Anchor::SEGMENT) {
++        const Fraction endpoint = grip == Grip::START ? tick() : tick2();
++        if (!score()->tick2segmentMM(endpoint, false, SegmentType::ChordRest)) {
++            Measure* m = score()->tick2measureMM(endpoint);
++            if (m && m->system() && !m->isMMRest()) {
++                Fraction leftTick(0, 1), rightTick = m->ticks();
++                double leftX = 0.0, rightX = m->width();
++                const Fraction relative = endpoint - m->tick();
++                for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
++                    if (!s->enabled()) {
++                        continue;
++                    }
++                    if (s->rtick() > relative) {
++                        rightTick = s->rtick();
++                        rightX = s->x();
++                        break;
++                    }
++                    leftTick = s->rtick();
++                    leftX = s->x();
++                }
++                const Fraction distance = rightTick - leftTick;
++                const double ratio = distance.isZero() ? 0.0 : ((relative - leftTick) / distance).toDouble();
++                *sys = m->system();
++                return PointF(m->pos().x() + leftX + (rightX - leftX) * ratio, 0.0);
++            }
++        }
++    }
+     double x = 0.0;
+     double sp = staff() ? staff()->spatium(tick()) : 0;
+     switch (anchor()) {
+--- a/src/engraving/libmscore/noteevent.cpp
++++ b/src/engraving/libmscore/noteevent.cpp
+@@ -38,9 +38,13 @@
+         if (tag == "pitch") {
+             _pitch = e.readInt();
+         } else if (tag == "ontime") {
+-            _ontime = e.readInt();
++            setOntime(e.readInt());
+         } else if (tag == "len") {
+-            _len = e.readInt();
++            setLen(e.readInt());
++        } else if (tag == "playbackOntime") {
++            _playbackOntime = e.readDouble();
++        } else if (tag == "playbackLen") {
++            _playbackLen = e.readDouble();
+         } else {
+             e.unknown();
+         }
+@@ -57,6 +61,8 @@
+     xml.tag("pitch", _pitch, 0);
+     xml.tag("ontime", _ontime, 0);
+     xml.tag("len", _len, NOTE_LENGTH);
++    if (_playbackOntime != _ontime) { xml.tag("playbackOntime", _playbackOntime); }
++    if (_playbackLen != _len) { xml.tag("playbackLen", _playbackLen); }
+     xml.endElement();
+ }
+ 
+@@ -75,6 +81,7 @@
+ 
+ bool NoteEvent::operator==(const NoteEvent& e) const
+ {
+-    return (e._pitch == _pitch) && (e._ontime == _ontime) && (e._len == _len);
++    return (e._pitch == _pitch) && (e._ontime == _ontime) && (e._len == _len)
++           && e._playbackOntime == _playbackOntime && e._playbackLen == _playbackLen;
+ }
+ }
+--- a/src/engraving/libmscore/noteevent.h
++++ b/src/engraving/libmscore/noteevent.h
+@@ -41,14 +41,16 @@
+     int _pitch;     // relative pitch to note pitch
+     int _ontime;    // one unit is 1/1000 of nominal note len
+     int _len;       // one unit is 1/1000 of nominal note len
++    double _playbackOntime = 0.0;
++    double _playbackLen = NOTE_LENGTH;
+ 
+ public:
+     constexpr static int NOTE_LENGTH = 1000;
+ 
+     NoteEvent()
+         : _pitch(0), _ontime(0), _len(NOTE_LENGTH) {}
+-    NoteEvent(int a, int b, int c)
+-        : _pitch(a), _ontime(b), _len(c) {}
++    NoteEvent(int a, double b, double c)
++        : _pitch(a), _ontime(int(b)), _len(int(c)), _playbackOntime(b), _playbackLen(c) {}
+ 
+     void read(XmlReader&);
+     void write(XmlWriter&) const;
+@@ -58,8 +60,12 @@
+     int offtime() const { return _ontime + _len; }
+     int len() const { return _len; }
+     void setPitch(int v) { _pitch = v; }
+-    void setOntime(int v) { _ontime = v; }
+-    void setLen(int v) { _len = v; }
++    bool hasPreciseTiming() const { return _playbackOntime != _ontime || _playbackLen != _len; }
++    double playbackOntime() const { return _playbackOntime; }
++    double playbackLen() const { return _playbackLen; }
++    void setOntime(int v) { _ontime = v; _playbackOntime = v; }
++    void setLen(int v) { _len = v; _playbackLen = v; }
++    void setPlaybackLen(double v) { _len = int(v); _playbackLen = v; }
+     bool operator==(const NoteEvent&) const;
+ };
+ 
+--- a/src/engraving/libmscore/rendermidi.cpp
++++ b/src/engraving/libmscore/rendermidi.cpp
+@@ -403,8 +403,8 @@
+         } else if (p > 127) {
+             p = 127;
+         }
+-        int on  = tick1 + (ticks * e.ontime()) / 1000;
+-        int off = on + (ticks * e.len()) / 1000 - 1;
++        int on  = tick1 + (e.hasPreciseTiming() ? int(std::lround(ticks * e.playbackOntime() / 1000.0)) : (ticks * e.ontime()) / 1000);
++        int off = on + (e.hasPreciseTiming() ? int(std::lround(ticks * e.playbackLen() / 1000.0)) : (ticks * e.len()) / 1000) - 1;
+         if (tieFor && i == static_cast<int>(nels) - 1) {
+             off += tieLen;
+         }
+@@ -1947,11 +1947,27 @@
+         // If we are here then we still need to render the note.
+         // Render its body if necessary and apply gateTime.
+         if (el->size() == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
+-            el->push_back(NoteEvent(0, ontime, 1000 - trailtime));
++            // Both leading and trailing grace budgets come from this note.
++            double bodyOn = ontime, bodyEnd = 1000 - trailtime;
++            const auto before = chord->graceNotesBefore();
++            const auto after = chord->graceNotesAfter();
++            if (!before.empty() && !before.back()->notes().empty()) {
++                const auto& events = before.back()->notes().front()->playEvents();
++                if (!events.empty()) { bodyOn = events.back().playbackOntime() + events.back().playbackLen(); }
++            }
++            if (!after.empty() && !after.front()->notes().empty()) {
++                const auto& events = after.front()->notes().front()->playEvents();
++                if (!events.empty()) { bodyEnd = events.front().playbackOntime(); }
++            }
++            el->push_back(NoteEvent(0, bodyOn, std::max(0.0, bodyEnd - bodyOn)));
+         }
+         if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
+             for (NoteEvent& e : ell[i]) {
+-                e.setLen(chord->notes()[i]->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
++                if (e.hasPreciseTiming()) {
++                    e.setPlaybackLen(chord->notes()[i]->deadNote() ? deadNoteDurationInTicks : e.playbackLen() * gateTime / 100);
++                } else {
++                    e.setLen(chord->notes()[i]->deadNote() ? deadNoteDurationInTicks : e.len() * gateTime / 100);
++                }
+             }
+         }
+     }
+@@ -2025,23 +2041,54 @@
+         graceDuration = ontime / nb;
+     }
+ 
+-    for (int i = 0, on = 0; i < nb; ++i) {
++    // Resolve explicit per-grace source budgets before generating events.
++    // Unspecified notes retain their normal share; malformed totals retain
++    // the native defaults rather than producing negative principal durations.
++    int defaultTrailtime = 0;
++    if (na) {
++        defaultTrailtime = floor((chord->dots() == 1 ? 667 : chord->dots() == 2 ? 571 : 500) * weighta);
++    }
++    std::vector<double> beforeDurations(nb, graceDuration);
++    std::vector<double> afterDurations(na, na ? defaultTrailtime / na : 0);
++    double beforeTotal = 0;
++    double afterTotal = 0;
++    bool explicitBudget = false;
++    for (int i = 0; i < nb; ++i) {
++        const double percent = gnb[i]->graceStealFollowing();
++        if (percent >= 0.0) { beforeDurations[i] = percent * 10.0; explicitBudget = true; }
++        beforeTotal += beforeDurations[i];
++    }
++    for (int i = 0; i < na; ++i) {
++        const double percent = gna[i]->graceStealPrevious();
++        if (percent >= 0.0) { afterDurations[i] = percent * 10.0; explicitBudget = true; }
++        afterTotal += afterDurations[i];
++    }
++    if (explicitBudget && beforeTotal + afterTotal <= 1000) {
++        ontime = beforeTotal;
++        trailtime = afterTotal;
++    } else {
++        explicitBudget = false;
++    }
++    double beforeOn = 0;
++    for (int i = 0; i < nb; ++i) {
+         std::vector<NoteEventList> el;
+         Chord* gc = gnb.at(i);
+         size_t nn = gc->notes().size();
+         for (unsigned ii = 0; ii < nn; ++ii) {
+             NoteEventList nel;
+-            nel.push_back(NoteEvent(0, on, graceDuration));
++            nel.push_back(NoteEvent(0, beforeOn, explicitBudget ? beforeDurations[i] : graceDuration));
+             el.push_back(nel);
+         }
+ 
+         if (gc->playEventType() == PlayEventType::Auto) {
+             gc->setNoteEventLists(el);
+         }
+-        on += graceDuration;
++        beforeOn += explicitBudget ? beforeDurations[i] : graceDuration;
+     }
+     if (na) {
+-        if (chord->dots() == 1) {
++        if (explicitBudget) {
++            // trailtime already reflects the source budget.
++        } else if (chord->dots() == 1) {
+             trailtime = floor(667 * weighta);
+         } else if (chord->dots() == 2) {
+             trailtime = floor(571 * weighta);
+@@ -2049,21 +2096,21 @@
+             trailtime = floor(500 * weighta);
+         }
+         int graceDuration1 = trailtime / na;
+-        int on = 1000 - trailtime;
++        double on = 1000 - (explicitBudget ? afterTotal : trailtime);
+         for (int i = 0; i < na; ++i) {
+             std::vector<NoteEventList> el;
+             Chord* gc = gna.at(i);
+             size_t nn = gc->notes().size();
+             for (size_t ii = 0; ii < nn; ++ii) {
+                 NoteEventList nel;
+-                nel.push_back(NoteEvent(0, on, graceDuration1));         // NoteEvent(pitch,ontime,len)
++                nel.push_back(NoteEvent(0, on, explicitBudget ? afterDurations[i] : graceDuration1));         // NoteEvent(pitch,ontime,len)
+                 el.push_back(nel);
+             }
+ 
+             if (gc->playEventType() == PlayEventType::Auto) {
+                 gc->setNoteEventLists(el);
+             }
+-            on += graceDuration1;
++            on += explicitBudget ? afterDurations[i] : graceDuration1;
+         }
+     }
+ }
+--- a/src/engraving/libmscore/scorefile.cpp
++++ b/src/engraving/libmscore/scorefile.cpp
+@@ -424,7 +424,7 @@
+ //    Returns true if <voice> tag was written.
+ //---------------------------------------------------------
+ 
+-static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTick, track_idx_t track, int* lastTrackWrittenPtr)
++static bool writeVoiceMoveAtTick(XmlWriter& xml, const Fraction& destinationTick, const Fraction& startTick, track_idx_t track, int* lastTrackWrittenPtr)
+ {
+     bool voiceTagWritten = false;
+     int& lastTrackWritten = *lastTrackWrittenPtr;
+@@ -440,22 +440,27 @@
+         voiceTagWritten = true;
+     }
+ 
+-    if ((xml.context()->curTick() != seg->tick()) || (track != xml.context()->curTrack())) {
++    if ((xml.context()->curTick() != destinationTick) || (track != xml.context()->curTrack())) {
+         Location curr = Location::absolute();
+         Location dest = Location::absolute();
+         curr.setFrac(xml.context()->curTick());
+-        dest.setFrac(seg->tick());
++        dest.setFrac(destinationTick);
+         curr.setTrack(static_cast<int>(xml.context()->curTrack()));
+         dest.setTrack(static_cast<int>(track));
+ 
+         dest.toRelative(curr);
+         dest.write(xml);
+ 
+-        xml.context()->setCurTick(seg->tick());
++        xml.context()->setCurTick(destinationTick);
+         xml.context()->setCurTrack(track);
+     }
+ 
+     return voiceTagWritten;
++}
++
++static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTick, track_idx_t track, int* lastTrackWrittenPtr)
++{
++    return writeVoiceMoveAtTick(xml, seg->tick(), startTick, track, lastTrackWrittenPtr);
+ }
+ 
+ //---------------------------------------------------------
+@@ -665,6 +670,35 @@
+             }
+         }
+ 
++        // Serialize off-onset hairpin endpoints at their own clocks. Do not add
++        // placeholder rests or notes solely to satisfy the native writer.
++        for (Spanner* s : spanners) {
++            if (!s->isHairpin() || s->anchor() != Spanner::Anchor::SEGMENT) {
++                continue;
++            }
++            for (int endpointIndex = 0; endpointIndex < 2; ++endpointIndex) {
++                const bool isStart = endpointIndex == 0;
++                const Fraction endpoint = isStart ? s->tick() : s->tick2();
++                const track_idx_t endpointTrack = isStart ? s->track() : s->effectiveTrack2();
++                if (endpointTrack != track || endpoint < sseg->tick() || endpoint >= endTick
++                    || score()->tick2segment(endpoint, false, SegmentType::ChordRest)) {
++                    continue;
++                }
++                Measure* m = score()->tick2measure(endpoint);
++                if (!m || m->isMMRest() || (clip && (s->tick() < sseg->tick() || s->tick2() > endTick))) {
++                    continue;
++                }
++                const Fraction previousTick = xml.context()->curTick();
++                voiceTagWritten |= writeVoiceMoveAtTick(xml, endpoint, startTick, track, &lastTrackWritten);
++                if (isStart) {
++                    s->writeSpannerStart(xml, m, track, endpoint);
++                } else {
++                    s->writeSpannerEnd(xml, m, track, endpoint);
++                }
++                voiceTagWritten |= writeVoiceMoveAtTick(xml, previousTick, startTick, track, &lastTrackWritten);
++            }
++        }
++
+         //write spanner ending after the last segment, on the last tick
+         if (clip || eseg == 0) {
+             for (Spanner* s : spanners) {
+--- a/src/engraving/libmscore/spanner.cpp
++++ b/src/engraving/libmscore/spanner.cpp
+@@ -745,7 +745,7 @@
+             return;
+         }
+ 
+-        if (endCR() && !endCR()->measure()->isMMRest() && !systemFlag()) {
++        if (endCR() && !endCR()->measure()->isMMRest() && !systemFlag() && !isHairpin()) {
+             ChordRest* cr = endCR();
+             Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
+             if ((_ticks - nticks).isNotZero()) {
+@@ -1569,11 +1569,13 @@
+     : ConnectorInfoWriter(xml, current, sp, track, frac)
+ {
+     const bool clipboardmode = xml.context()->clipboardmode();
+-    if (!sp->startElement() || !sp->endElement()) {
++    const bool tickAnchored = sp->isHairpin() && sp->anchor() == Spanner::Anchor::SEGMENT
++                              && (current->isMeasure() || current->isSegment());
++    if (!tickAnchored && (!sp->startElement() || !sp->endElement())) {
+         LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
+         return;
+     }
+-    if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
++    if (tickAnchored || current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
+         // (The latter is the hairpins' case, for example, though they are
+         // covered by the other checks too.)
+         // We cannot determine position of the spanner from its start/end
+--- /dev/null
++++ b/src/engraving/types/musicxmltimegrid.h
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-3.0-only
++// Copyright 2026 Luckolite
++// Exact time conversion for the standalone GPL engraving renderer.
++#ifndef MU_ENGRAVING_MUSICXMLTIMEGRID_H
++#define MU_ENGRAVING_MUSICXMLTIMEGRID_H
++#include <cstdint>
++#include <limits>
++#include <numeric>
++#include <stdexcept>
++namespace mu::engraving::musicxml {
++inline void boundedFraction(int64_t numerator, int64_t denominator)
++{
++    if (numerator < std::numeric_limits<int>::min() || numerator > std::numeric_limits<int>::max()
++        || denominator <= 0 || denominator > std::numeric_limits<int>::max()) {
++        throw std::runtime_error("MusicXML fraction is outside the native range");
++    }
++}
++class TimeGrid {
++    int m_divisions;
++public:
++    explicit TimeGrid(int initial = 1) : m_divisions(initial)
++    {
++        if (initial <= 0) {
++            throw std::runtime_error("MusicXML divisions must be positive");
++        }
++    }
++    void observe(int64_t numerator, int64_t denominator)
++    {
++        boundedFraction(numerator, denominator);
++        const int64_t magnitude = numerator < 0 ? -numerator : numerator;
++        const int64_t required = denominator / std::gcd(4 * magnitude, denominator);
++        const int64_t quotient = m_divisions / std::gcd(int64_t(m_divisions), required);
++        if (quotient > std::numeric_limits<int>::max() / required) {
++            throw std::runtime_error("MusicXML exact divisions grid is too large");
++        }
++        m_divisions = int(quotient * required);
++    }
++    int divisions() const { return m_divisions; }
++};
++inline int exactUnits(int64_t numerator, int64_t denominator, int divisions)
++{
++    boundedFraction(numerator, denominator);
++    if (divisions <= 0) {
++        throw std::runtime_error("MusicXML divisions must be positive");
++    }
++    int64_t scale = 4LL * divisions;
++    const int64_t common = std::gcd(scale, denominator);
++    scale /= common;
++    denominator /= common;
++    if (numerator % denominator != 0) {
++        throw std::runtime_error("MusicXML grid would round an exact clock");
++    }
++    const int64_t quotient = numerator / denominator;
++    if (quotient < std::numeric_limits<int>::min() / scale || quotient > std::numeric_limits<int>::max() / scale) {
++        throw std::runtime_error("MusicXML duration is outside the output range");
++    }
++    return int(quotient * scale);
++}
++}
++#endif
+--- a/src/framework/audio/internal/encoders/wavencoder.cpp
++++ b/src/framework/audio/internal/encoders/wavencoder.cpp
+@@ -50,7 +50,7 @@
+         const uint32_t file_length = headerLength + sampleDataLength;
+         const uint32_t overallSize = file_length - 8;
+         const uint32_t bytesPerFrame = audioChannelsNumber * bytesPerSample;
+-        const uint32_t bytesPerSec = sampleRate * bytesPerSample;
++        const uint32_t bytesPerSec = sampleRate * bytesPerFrame;
+ 
+         stream.write("RIFF", 4); // chunk ID
+ 
+@@ -60,7 +60,7 @@
+ 
+         writeTagData<uint32_t>(stream, chunkSize);
+         writeTagData<uint16_t>(stream, code);
+-        writeTagData<uint16_t>(stream, 2);
++        writeTagData<uint16_t>(stream, audioChannelsNumber);
+         writeTagData<uint32_t>(stream, sampleRate);
+         writeTagData<uint32_t>(stream, bytesPerSec);
+         writeTagData<uint16_t>(stream, bytesPerFrame);
+--- a/src/framework/audio/internal/synthesizers/fluidsynth/fluidsequencer.cpp
++++ b/src/framework/audio/internal/synthesizers/fluidsynth/fluidsequencer.cpp
+@@ -277,13 +277,13 @@
+ 
+     float stepCount = ((dynamicLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
+ 
+-    if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
+-        stepCount -= 0.5;
+-    }
+-
+-    if (dynamicLevel > mpe::dynamicLevelFromType(DynamicType::Natural)) {
+-        stepCount -= 1;
+-    }
++    // Keep the named dynamics unchanged while interpolating the default-level
++    // adjustment continuously between mp and mf. A threshold at Natural makes
++    // an increasing hairpin jump backwards (and a decreasing one forwards).
++    const float naturalAdjustment = std::clamp(
++        (dynamicLevel - mpe::dynamicLevelFromType(DynamicType::mp))
++        / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP), 0.0f, 1.0f);
++    stepCount -= naturalAdjustment;
+ 
+     dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
+ 
+--- a/src/importexport/musicxml/internal/musicxml/exportxml.cpp
++++ b/src/importexport/musicxml/internal/musicxml/exportxml.cpp
+@@ -102,6 +102,7 @@
+ #include "libmscore/rest.h"
+ #include "libmscore/segment.h"
+ #include "libmscore/sig.h"
++#include "types/musicxmltimegrid.h"
+ #include "libmscore/slur.h"
+ #include "libmscore/spanner.h"
+ #include "libmscore/staff.h"
+@@ -345,6 +346,8 @@
+ 
+ typedef QHash<const ChordRest* const, const Trill*> TrillHash;
+ typedef QMap<const Instrument*, int> MxmlInstrumentMap;
++
++static Fraction stretchCorrActFraction(const Note* const note);
+ 
+ class ExportMusicXml
+ {
+@@ -1255,6 +1258,19 @@
+                     }
+                 }
+             }
++            // Include off-onset expression clocks in the MusicXML divisions grid.
++            for (const auto& item : _score->spanner()) {
++                const Spanner* span = item.second;
++                if (!span->isHairpin() || !canWrite(span) || span->track() < strack || span->track() >= etrack) {
++                    continue;
++                }
++                if (span->tick() >= m->tick() && span->tick() < m->endTick()) {
++                    calcDivMoveToTick(span->tick());
++                }
++                if (span->tick2() > m->tick() && span->tick2() <= m->endTick()) {
++                    calcDivMoveToTick(span->tick2());
++                }
++            }
+             // move to end of measure (in case of incomplete last voice)
+             calcDivMoveToTick(m->endTick());
+         }
+@@ -1267,7 +1283,43 @@
+         }
+     }
+ 
+-    div = Constants::division / integers[0];
++    mu::engraving::musicxml::TimeGrid grid(integers[0]);
++    const auto observe = [&grid](const Fraction& value) {
++        const Fraction reduced = value.reduced();
++        grid.observe(reduced.numerator(), reduced.denominator());
++    };
++    // Preserve the old compact grid where it is exact, and expand it only
++    // when the score contains a clock the old 480-tick export would round.
++    for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
++        observe(measure->tick());
++        observe(measure->endTick());
++        for (Segment* segment = measure->first(); segment; segment = segment->next()) {
++            observe(segment->tick());
++            for (track_idx_t track = 0; track < _score->ntracks(); ++track) {
++                EngravingItem* item = segment->element(track);
++                if (item && item->isChordRest()) {
++                    observe(toChordRest(item)->actualTicks());
++                    if (item->isChord()) {
++                        for (const Note* note : toChord(item)->notes()) {
++                            observe(stretchCorrActFraction(note));
++                        }
++                    }
++                }
++            }
++            for (const EngravingItem* annotation : segment->annotations()) {
++                if (annotation->isFiguredBass()) {
++                    observe(toFiguredBass(annotation)->ticks());
++                }
++            }
++        }
++    }
++    for (const auto& item : _score->spanner()) {
++        if (item.second->isHairpin() && canWrite(item.second)) {
++            observe(item.second->tick());
++            observe(item.second->tick2());
++        }
++    }
++    div = grid.divisions();
+ #ifdef DEBUG_TICK
+     LOGD("divisions=%d div=%d", integers[0], div);
+ #endif
+@@ -2034,7 +2086,8 @@
+ 
+ static int calculateTimeDeltaInDivisions(const Fraction& t1, const Fraction& t2, const int divisions)
+ {
+-    return (t1 - t2).ticks() / divisions;
++    const Fraction delta = (t1 - t2).reduced();
++    return mu::engraving::musicxml::exactUnits(delta.numerator(), delta.denominator(), divisions);
+ }
+ 
+ //---------------------------------------------------------
+@@ -3683,11 +3736,11 @@
+         _xml.startElementRaw(noteTag);
+ 
+         if (grace) {
+-            if (note->noteType() == NoteType::ACCIACCATURA) {
+-                _xml.tag("grace", { { "slash", "yes" } });
+-            } else {
+-                _xml.tag("grace");
+-            }
++            XmlWriter::Attributes graceAttributes;
++            if (note->noteType() == NoteType::ACCIACCATURA || chord->sourceGraceSlash()) { graceAttributes.push_back({ "slash", "yes" }); }
++            if (chord->graceStealPrevious() >= 0.0) { graceAttributes.push_back({ "steal-time-previous", chord->graceStealPrevious() }); }
++            if (chord->graceStealFollowing() >= 0.0) { graceAttributes.push_back({ "steal-time-following", chord->graceStealFollowing() }); }
++            _xml.tag("grace", graceAttributes);
+         }
+         if (isCueNote(note)) {
+             _xml.tag("cue");
+@@ -3700,7 +3753,7 @@
+ 
+         // duration
+         if (!grace) {
+-            _xml.tag("duration", stretchCorrActFraction(note).ticks() / div);
++            _xml.tag("duration", calculateTimeDeltaInDivisions(stretchCorrActFraction(note), Fraction(0, 1), div));
+         }
+ 
+         if (!isCueNote(note)) {
+@@ -3900,7 +3953,7 @@
+     LOGD(" tickLen=%d newtick=%d", tickLen, tick);
+ #endif
+ 
+-    _xml.tag("duration", tickLen.ticks() / div);
++    _xml.tag("duration", calculateTimeDeltaInDivisions(tickLen, Fraction(0, 1), div));
+ 
+     // for a single-staff part, staff is 0, which needs to be corrected
+     // to calculate the correct voice number
+@@ -5735,7 +5788,7 @@
+             if (track == wtrack) {
+                 switch (e->type()) {
+                 case ElementType::HAIRPIN:
+-                    exp->hairpin(toHairpin(e), sstaff, seg->tick());
++                    // Hairpins use the chronological, note-independent measure pass.
+                     break;
+                 case ElementType::OTTAVA:
+                     exp->ottava(toOttava(e), sstaff, seg->tick());
+@@ -5810,7 +5863,7 @@
+             stopped.insert(e);
+             switch (e->type()) {
+             case ElementType::HAIRPIN:
+-                exp->hairpin(toHairpin(e), sstaff, Fraction(-1, 1));
++                // Hairpins use the chronological, note-independent measure pass.
+                 break;
+             case ElementType::OTTAVA:
+                 exp->ottava(toOttava(e), sstaff, Fraction(-1, 1));
+@@ -6716,6 +6769,46 @@
+  Write the annotations that could not be attached to notes.
+  */
+ 
++// Direction timing is independent of the existence and order of notes in voices.
++// Emit hairpins in chronological order once per part/measure, preserving exact
++// endpoint clocks and numbering even when all four voices sustain through them.
++static void hairpinsInMeasure(ExportMusicXml* exp, track_idx_t firstTrack, int staves, const Measure* measure)
++{
++    struct Endpoint {
++        const Hairpin* hairpin;
++        Fraction tick;
++        bool start;
++        int order;
++    };
++    std::vector<Endpoint> endpoints;
++    for (const auto& item : exp->score()->spanner()) {
++        Spanner* span = item.second;
++        if (!span->isHairpin() || !exp->canWrite(span) || span->track() < firstTrack
++            || span->track() >= firstTrack + staves * VOICES) {
++            continue;
++        }
++        const Hairpin* hp = toHairpin(span);
++        const bool zero = span->tick() == span->tick2();
++        if (span->tick() >= measure->tick() && span->tick() < measure->endTick()) {
++            endpoints.push_back({hp, span->tick(), true, zero ? 1 : 3});
++        }
++        if ((span->tick2() > measure->tick() && span->tick2() <= measure->endTick())
++            || (zero && span->tick2() == measure->tick())) {
++            endpoints.push_back({hp, span->tick2(), false, zero ? 2 : 0});
++        }
++    }
++    std::stable_sort(endpoints.begin(), endpoints.end(), [](const Endpoint& a, const Endpoint& b) {
++        return a.tick != b.tick ? a.tick < b.tick : a.order < b.order;
++    });
++    const Fraction previousTick = exp->tick();
++    for (const Endpoint& endpoint : endpoints) {
++        exp->moveToTick(endpoint.tick);
++        const staff_idx_t staff = staves > 1 ? endpoint.hairpin->staffIdx() - track2staff(firstTrack) + 1 : 0;
++        exp->hairpin(endpoint.hairpin, staff, endpoint.start ? endpoint.tick : Fraction(-1, 1));
++    }
++    exp->moveToTick(previousTick);
++}
++
+ static void annotationsWithoutNote(ExportMusicXml* exp, const track_idx_t strack, const int staves, const Measure* const measure)
+ {
+     for (auto segment = measure->first(); segment; segment = segment->next()) {
+@@ -6978,7 +7071,7 @@
+                         }
+                         for (auto annot : seg1->annotations()) {
+                             if (annot->isHarmony() && annot->track() == track) {
+-                                harmony(toHarmony(annot), 0, (seg1->tick() - seg->tick()).ticks() / div);
++                                harmony(toHarmony(annot), 0, calculateTimeDeltaInDivisions(seg1->tick(), seg->tick(), div));
+                             }
+                         }
+                     }
+@@ -7103,7 +7196,7 @@
+     // output attributes with the first actual measure (pickup or regular)
+     if (isFirstActualMeasure) {
+         _attr.doAttr(_xml, true);
+-        _xml.tag("divisions", Constants::division / div);
++        _xml.tag("divisions", div);
+     }
+ 
+     // output attributes at start of measure: key, time
+@@ -7139,6 +7232,8 @@
+     if (partIndex == 0) {
+         repeatAtMeasureStart(_attr, m, strack, etrack, strack);
+     }
++
++    hairpinsInMeasure(this, strack, static_cast<int>(staves), m);
+ 
+     // write data in the staves
+     writeMeasureStaves(m, partIndex, track2staff(strack), staves, part->instrument()->useDrumset(), fbMap, spannersStopped);
+--- a/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
++++ b/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
+@@ -67,6 +67,7 @@
+ #include "libmscore/rest.h"
+ #include "libmscore/score.h"
+ #include "libmscore/slur.h"
++#include "libmscore/spannermap.h"
+ #include "libmscore/staff.h"
+ #include "libmscore/stafftext.h"
+ #include "libmscore/tempo.h"
+@@ -588,72 +589,59 @@
+                                const MusicXmlIntervalList& intervList,
+                                const MusicXMLInstruments& instruments)
+ {
+-    if (instruments.empty()) {
+-        // no instrument details found, create a default instrument
+-        //LOGD("no instrument details");
+-        updatePartWithInstrument(part, {}, intervList.interval({ 0, 1 }));
++    if (hasDrumset(instruments)) {
++        // A drum part uses one drumset, independent of pitched transposition.
++        updatePartWithInstrument(part, instruments.first(), {}, true);
+         return;
+     }
+ 
+-    if (hasDrumset(instruments)) {
+-        // do not create multiple instruments for a drum part
+-        //LOGD("hasDrumset");
+-        MusicXMLInstrument mxmlInstr = instruments.first();
+-        updatePartWithInstrument(part, mxmlInstr, {}, true);
+-        return;
+-    }
+-
+-    if (instrList.empty()) {
+-        // instrument details found, but no instrument ids found
+-        // -> only a single instrument is playing in the part
+-        //LOGD("single instrument");
+-        MusicXMLInstrument mxmlInstr = instruments.first();
+-        updatePartWithInstrument(part, mxmlInstr, intervList.interval({ 0, 1 }));
+-        return;
+-    }
+-
+-    // either a single instrument is playing, or forwards / rests resulted in gaps in the instrument map
+-    // (and thus multiple entries)
+-    //LOGD("possibly multiple instruments");
+-    QString prevInstrId;
+-    for (auto it = instrList.cbegin(); it != instrList.cend(); ++it) {
+-        Fraction tick = (*it).first;
+-        if (it == instrList.cbegin()) {
+-            prevInstrId = (*it).second;              // first instrument id
+-            MusicXMLInstrument mxmlInstr = instruments.value(prevInstrId);
+-            updatePartWithInstrument(part, mxmlInstr, intervList.interval(tick));
+-        } else {
+-            auto instrId = (*it).second;
+-            bool mustInsert = instrId != prevInstrId;
+-            /*
+-             LOGD("tick %s previd %s id %s mustInsert %d",
+-             qPrintable(tick.print()),
+-             qPrintable(prevInstrId),
+-             qPrintable(instrId),
+-             mustInsert);
+-             */
+-            if (mustInsert) {
+-                const staff_idx_t staff = score->staffIdx(part);
+-                const track_idx_t track = staff * VOICES;
+-                //LOGD("instrument change: tick %s (%d) track %d instr '%s'",
+-                //       qPrintable(tick.print()), tick.ticks(), track, qPrintable(instrId));
+-
+-                Measure* const m = score->tick2measure(tick);
+-                Segment* const segment = m->getSegment(SegmentType::ChordRest, tick);
+-
+-                if (!segment) {
+-                    logger->logError(QString("segment for instrument change at tick %1 not found")
+-                                     .arg(tick.ticks()), xmlreader);
+-                } else if (!instruments.contains(instrId)) {
+-                    logger->logError(QString("changed instrument '%1' at tick %2 not found in part '%3'")
+-                                     .arg(instrId).arg(tick.ticks()).arg(partId), xmlreader);
+-                } else {
+-                    MusicXMLInstrument mxmlInstr = instruments.value(instrId);
+-                    updatePartWithInstrumentChange(part, mxmlInstr, intervList.interval(tick), segment, track, tick);
+-                }
+-            }
+-            prevInstrId = instrId;
+-        }
++    // Instrument IDs and transposition attributes are independent timelines.
++    // In particular, an interval change must not disappear when the part has
++    // no instrument metadata, no note IDs, or an unchanged instrument ID.
++    QString prevInstrId = instrList.empty() ? QString() : instrList.cbegin()->second;
++    Interval prevInterval = intervList.interval(Fraction(0, 1));
++    const auto instrumentFor = [&](const QString& id) {
++        return instruments.empty() ? MusicXMLInstrument()
++               : id.isEmpty() ? instruments.first() : instruments.value(id);
++    };
++    updatePartWithInstrument(part, instrumentFor(prevInstrId), prevInterval);
++
++    std::map<Fraction, bool> changes;
++    for (const auto& entry : instrList) {
++        changes.emplace(entry.first, true);
++    }
++    for (const auto& entry : intervList) {
++        changes.emplace(entry.first, true);
++    }
++    for (const auto& entry : changes) {
++        const Fraction tick = entry.first;
++        if (tick <= Fraction(0, 1)) {
++            continue;
++        }
++        QString instrId = instrList.instrument(tick);
++        if (instrId.isEmpty()) {
++            instrId = prevInstrId;
++        }
++        const Interval interval = intervList.interval(tick);
++        if (instrId == prevInstrId && interval == prevInterval) {
++            continue;
++        }
++        if (!instruments.empty() && !instrId.isEmpty() && !instruments.contains(instrId)) {
++            logger->logError(QString("changed instrument '%1' at tick %2 not found in part '%3'")
++                             .arg(instrId).arg(tick.ticks()).arg(partId), xmlreader);
++            continue;
++        }
++        Measure* const measure = score->tick2measure(tick);
++        Segment* const segment = measure ? measure->getSegment(SegmentType::ChordRest, tick) : nullptr;
++        if (!segment) {
++            logger->logError(QString("segment for instrument change at tick %1 not found")
++                             .arg(tick.ticks()), xmlreader);
++            continue;
++        }
++        const track_idx_t track = score->staffIdx(part) * VOICES;
++        updatePartWithInstrumentChange(part, instrumentFor(instrId), interval, segment, track, tick);
++        prevInstrId = instrId;
++        prevInterval = interval;
+     }
+ }
+ 
+@@ -1281,6 +1269,9 @@
+     new_sp->setTrack(track);
+     setSLinePlacement(new_sp, placement);
+     spanners[new_sp] = QPair<int, int>(tick.ticks(), -1);
++    if (new_sp->isHairpin()) {
++        new_sp->setTick(tick);
++    }
+ }
+ 
+ //---------------------------------------------------------
+@@ -1296,6 +1287,9 @@
+ 
+     cur_sp->setTrack2(track2);
+     spanners[cur_sp].second = tick.ticks();
++    if (cur_sp->isHairpin()) {
++        cur_sp->setTick2(tick);
++    }
+ }
+ 
+ //---------------------------------------------------------
+@@ -1617,6 +1611,34 @@
+             skipLogCurrElem();
+         }
+     }
++    // Grace chords acquire their parent only after their MusicXML note was read.
++    // Bind completed slur clocks to the final chord anchors before serialization:
++    // a trailing grace uses its principal tick, not the next ordinary attack.
++    std::vector<Spanner*> anchoredSlurs;
++    for (const auto& entry : _score->spannerMap().map()) {
++        auto* slur = entry.second;
++        if (slur->isSlur() && slur->startElement() && slur->endElement()
++            && slur->startElement()->isChordRest() && slur->endElement()->isChordRest()) {
++            anchoredSlurs.push_back(slur);
++        }
++    }
++    // Reindex changed starts only after collecting the original map entries.
++    for (auto* slur : anchoredSlurs) {
++        auto* start = toChordRest(slur->startElement());
++        auto* end = toChordRest(slur->endElement());
++        const bool reindex = slur->tick() != start->tick();
++        if (reindex) {
++            _score->spannerMap().removeSpanner(slur);
++        }
++        slur->setTick(start->tick());
++        slur->setTick2(end->tick());
++        slur->setTrack(start->track());
++        slur->setTrack2(end->track());
++        if (reindex) {
++            _score->spannerMap().addSpanner(slur);
++        }
++    }
++
+     // set last measure barline to normal or MuseScore will generate light-heavy EndBarline
+     auto lm = _score->lastMeasure();
+     if (lm && lm->endBarLineType() == BarLineType::NORMAL) {
+@@ -1757,6 +1779,11 @@
+         auto sp = i.key();
+         Fraction tick1 = Fraction::fromTicks(i.value().first);
+         Fraction tick2 = Fraction::fromTicks(i.value().second);
++        if (sp->isHairpin()) {
++            // Direction clocks can be exact rational positions between MIDI ticks.
++            tick1 = sp->tick();
++            tick2 = sp->tick2();
++        }
+         //LOGD("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
+         //       sp, sp->type(), qPrintable(tick1.print()), qPrintable(tick2.print()), sp->track(), sp->track2());
+         if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
+@@ -2686,17 +2713,19 @@
+ 
+     // handle the spanner stops first
+     foreach (auto desc, stops) {
++        // MusicXML direction offsets also locate hairpin endpoints between notes.
++        const Fraction spannerTick = desc._tp == ElementType::HAIRPIN ? tick + _offset : tick;
+         auto& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
+         if (spdesc._isStopped) {
+             _logger->logError("spanner already stopped", &_e);
+             delete desc._sp;
+         } else {
+             if (spdesc._isStarted) {
+-                handleSpannerStop(spdesc._sp, track, tick, spanners);
++                handleSpannerStop(spdesc._sp, track, spannerTick, spanners);
+                 _pass2.clearSpanner(desc);
+             } else {
+                 spdesc._sp = desc._sp;
+-                spdesc._tick2 = tick;
++                spdesc._tick2 = spannerTick;
+                 spdesc._track2 = track;
+                 spdesc._isStopped = true;
+             }
+@@ -2704,8 +2733,9 @@
+     }
+ 
+     // then handle the spanner starts
+-    // TBD handle offset ?
+     foreach (auto desc, starts) {
++        // MusicXML direction offsets also locate hairpin endpoints between notes.
++        const Fraction spannerTick = desc._tp == ElementType::HAIRPIN ? tick + _offset : tick;
+         auto& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
+         if (spdesc._isStarted) {
+             _logger->logError("spanner already started", &_e);
+@@ -2715,12 +2745,12 @@
+                 _pass2.addSpanner(desc);
+                 // handleSpannerStart and handleSpannerStop must be called in order
+                 // due to allocation of elements in the map
+-                handleSpannerStart(desc._sp, track, placement, tick, spanners);
++                handleSpannerStart(desc._sp, track, placement, spannerTick, spanners);
+                 handleSpannerStop(spdesc._sp, spdesc._track2, spdesc._tick2, spanners);
+                 _pass2.clearSpanner(desc);
+             } else {
+                 _pass2.addSpanner(desc);
+-                handleSpannerStart(desc._sp, track, placement, tick, spanners);
++                handleSpannerStart(desc._sp, track, placement, spannerTick, spanners);
+                 spdesc._isStarted = true;
+             }
+         }
+@@ -3209,6 +3239,7 @@
+         auto h = spdesc._isStopped ? toHairpin(spdesc._sp) : Factory::createHairpin(_score->dummy()->segment());
+         h->setHairpinType(type == "crescendo"
+                           ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
++        h->setSourceMusicXmlNumber(number + 1);
+         if (niente == "yes") {
+             h->setHairpinCircledTip(true);
+         }
+@@ -4492,6 +4523,10 @@
+     QString noteheadFilled;
+     int velocity = round(_e.attributes().value("dynamics").toDouble() * 0.9);
+     bool graceSlash = false;
++    double graceStealPrevious = -1.0;
++    double graceStealFollowing = -1.0;
++    bool explicitGraceTiming = false;
++    bool graceStealsPrevious = false;
+     bool printObject = _e.attributes().value("print-object") != "no";
+     BeamMode bm  = BeamMode::AUTO;
+     QString instrumentId;
+@@ -4518,6 +4553,16 @@
+         } else if (_e.name() == "grace") {
+             grace = true;
+             graceSlash = _e.attributes().value("slash") == "yes";
++            explicitGraceTiming = _e.attributes().hasAttribute("steal-time-previous")
++                                  || _e.attributes().hasAttribute("steal-time-following");
++            bool previousOk = false;
++            bool followingOk = false;
++            const double previous = _e.attributes().value("steal-time-previous").toDouble(&previousOk);
++            const double following = _e.attributes().value("steal-time-following").toDouble(&followingOk);
++            if (previousOk && previous >= 0.0 && previous <= 100.0) { graceStealPrevious = previous; }
++            if (followingOk && following >= 0.0 && following <= 100.0) { graceStealFollowing = following; }
++            explicitGraceTiming = graceStealPrevious >= 0.0 || graceStealFollowing >= 0.0;
++            graceStealsPrevious = graceStealPrevious >= 0.0;
+             _e.skipCurrentElement();  // skip but don't log
+         } else if (_e.name() == "instrument") {
+             instrumentId = _e.attributes().value("id").toString();
+@@ -4686,6 +4731,11 @@
+                 c = gcl.last();
+             }
+         }
++        if (grace) {
++            // Additional pitches in a grace chord may omit the timing attributes.
++            if (graceStealPrevious >= 0.0) { c->setGraceStealPrevious(graceStealPrevious); }
++            if (graceStealFollowing >= 0.0) { c->setGraceStealFollowing(graceStealFollowing); }
++        }
+         note = Factory::createNote(c);
+         const staff_idx_t ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
+         const int octaveShift = _pass1.octaveShift(partId, ottavaStaff, noteStartTime);
+@@ -4746,7 +4796,9 @@
+         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
+         note->setVisible(hasHead && printObject);     // TODO also set the stem to invisible
+ 
+-        if (mnd.calculatedDuration().isValid()
++        // Grace notes have no MusicXML duration; their events are generated
++        // from the principal chord rather than a zero-duration user override.
++        if (!grace && mnd.calculatedDuration().isValid()
+             && mnd.specifiedDuration().isValid()
+             && mnd.calculatedDuration().isNotZero()
+             && mnd.calculatedDuration() != mnd.specifiedDuration()) {
+@@ -4813,7 +4865,8 @@
+     }
+ 
+     // handle grace after state: remember current grace list size
+-    if (grace && notations.mustStopGraceAFter()) {
++    // Explicit source timing takes precedence over the legacy slur heuristic.
++    if (grace && (explicitGraceTiming ? graceStealsPrevious : notations.mustStopGraceAFter())) {
+         gac = gcl.size();
+     }
+ 
+--- a/web/CMakeLists.txt
++++ b/web/CMakeLists.txt
+@@ -57,7 +57,7 @@
+ set(WASM_LINK_FLAGS         "${WASM_LINK_FLAGS} -s ALLOW_TABLE_GROWTH=1")
+ set(WASM_LINK_FLAGS         "${WASM_LINK_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
+ # set(WASM_LINK_FLAGS         "${WASM_LINK_FLAGS} -s ASSERTIONS=1")
+-set(WASM_LINK_FLAGS         "${WASM_LINK_FLAGS} -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"_malloc\", \"_free\", \"ccall\", \"cwrap\", \"stringToUTF8\", \"UTF8ToString\", \"getValue\", \"setValue\"]'")
++set(WASM_LINK_FLAGS         "${WASM_LINK_FLAGS} -s EXTRA_EXPORTED_RUNTIME_METHODS=[_malloc,_free,ccall,cwrap,stringToUTF8,UTF8ToString,getValue,setValue]" )
+ 
+ set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fsigned-char")
+ set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fPIC")

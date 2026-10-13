@@ -1,0 +1,189 @@
+{
+  "upstream": "https://github.com/LibreScore/webmscore",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "license": "GPL-3.0-only",
+  "patchSha256": "4fce31e2d440459a686a8040bafb26c69724ecbdb9ee98c388d3dbd5cc1ae919",
+  "sourceFiles": [
+    {
+      "path": "build/cmake/GetPlatformInfo.cmake",
+      "sourceUtf8LfSha256": "e98c18941543aa4568792fe4be5ab256e6311a45127b5172574caa6ce239d040",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/chord.cpp",
+      "sourceUtf8LfSha256": "f7d4699dc7e3a660b51e33df3cdbeb7182732a34bab16583676dfa3bb20e8bd0",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/chord.h",
+      "sourceUtf8LfSha256": "f09d6807ba2d85b9be0f139d851358a38fcf293a06ce45def2725eb38e0e271b",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/figuredbass.cpp",
+      "sourceUtf8LfSha256": "28c306dbd50295a54c8f4038f1592dbc5d9726725125d5a35371fe363c43a4eb",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/hairpin.cpp",
+      "sourceUtf8LfSha256": "dc15183668a3e4121fe39d4170031856ea7263125b508fca4e0ba4e51a264d77",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/hairpin.h",
+      "sourceUtf8LfSha256": "c323ea7a756bb0d7ee70d0b87ed470cf029b43df9328331d50f91f8448ab2a91",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/line.cpp",
+      "sourceUtf8LfSha256": "e209be80d07883ef004a8b313c1d3691329df95101d62285e42d09c7d3d54c9e",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/noteevent.cpp",
+      "sourceUtf8LfSha256": "3acc869d477429245aa5c813fe64b6de01803854d6e84017f8cc1e23255fd45e",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/noteevent.h",
+      "sourceUtf8LfSha256": "8ef03085ec0ebd087fcbb8bbe84191e6c72588a10b8ff096790d967a2afa311a",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/rendermidi.cpp",
+      "sourceUtf8LfSha256": "e339f029127a56e331926fd3aa34b8e5078e5e4e8accb10775ee45257acba745",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/scorefile.cpp",
+      "sourceUtf8LfSha256": "a9e6f6bc09961973077c1a60c61e89d454c0db417921051f7f5878b7cae0959a",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/libmscore/spanner.cpp",
+      "sourceUtf8LfSha256": "18cee837461681dc26ab4aa696050c5e3c0f88889c5ee3cd164a14344fa56a4e",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/engraving/types/musicxmltimegrid.h",
+      "sourceUtf8LfSha256": "587ee0c8b21573c1e786df6dd14e1d233129783b14ab3b44f82c39d3417389c4",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/framework/audio/internal/encoders/wavencoder.cpp",
+      "sourceUtf8LfSha256": "1807be8ab1dc4258ac691c3d10e64dcd1ab15fa7b1ccb2cc796560bfa88dc93f",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/framework/audio/internal/synthesizers/fluidsynth/fluidsequencer.cpp",
+      "sourceUtf8LfSha256": "4d7f862cdb4ca408d600de60406c1d17b75987efb0c50493092a73f38ed2c666",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/importexport/musicxml/internal/musicxml/exportxml.cpp",
+      "sourceUtf8LfSha256": "ef65e0b579363e3eba48c728f57cf13bd9e9498ab0f899a115a831ebcd70c891",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp",
+      "sourceUtf8LfSha256": "9d0771e83bfe7b13c917d2d1cd7d7eb437b923978b24d59f5455100dec3c5650",
+      "license": "GPL-3.0-only"
+    },
+    {
+      "path": "web/CMakeLists.txt",
+      "sourceUtf8LfSha256": "21dcf0d0a20e70b438fbe812e14909322cd3fb0f5c1dd1e22f63de63fd1ef285",
+      "license": "GPL-3.0-only"
+    }
+  ],
+  "materializedUpstreamSymlinks": [
+    {
+      "path": "fonts/bravura/metadata.json",
+      "upstreamSymlinkTarget": "bravura_metadata.json",
+      "materializedLfBytesMatchUpstream": true,
+      "onlyCrLfCheckoutDifference": true,
+      "sha256": "b0663f21c2565ec583e3e8f0f0f32f3f0bbba77d44bcec2470005bcfd919b59d",
+      "upstreamSha256": "60e567277b7f2954647a55333612813982a7c72d57ff829da25601e8674cf433"
+    },
+    {
+      "path": "fonts/finalebroadway/metadata.json",
+      "upstreamSymlinkTarget": "Finale Broadway.json",
+      "materializedLfBytesMatchUpstream": true,
+      "onlyCrLfCheckoutDifference": true,
+      "sha256": "92a1e74f6128ef8090bfdd5d2b196dabf6fbcdc4916752d4a872f1f78e24269a",
+      "upstreamSha256": "bb4d8659b2a0ceed2a8db3953cf3a1d8c4382b7aa32f56c8c1ea5118176d727c"
+    },
+    {
+      "path": "fonts/finalemaestro/metadata.json",
+      "upstreamSymlinkTarget": "Finale Maestro.json",
+      "materializedLfBytesMatchUpstream": true,
+      "onlyCrLfCheckoutDifference": true,
+      "sha256": "33edb395ed6c06770bb84f39d1d0180d8c5f4b7e17c2c262a90d337e800929ae",
+      "upstreamSha256": "140e09c6df066fc1a4f141ac4d9993073993d661a6266593931941c94d73202d"
+    },
+    {
+      "path": "fonts/leland/metadata.json",
+      "upstreamSymlinkTarget": "leland_metadata.json",
+      "materializedLfBytesMatchUpstream": true,
+      "onlyCrLfCheckoutDifference": true,
+      "sha256": "00a2f84c16bd04258c733dac82f8e08f5e96cf647a8c69dc7e3598eee828a3b9",
+      "upstreamSha256": "7399e8085552c5ab589674e754d6fd34350fc1b44f484719015447620f3e1e7a"
+    },
+    {
+      "path": "fonts/petaluma/metadata.json",
+      "upstreamSymlinkTarget": "petaluma_metadata.json",
+      "materializedLfBytesMatchUpstream": true,
+      "onlyCrLfCheckoutDifference": true,
+      "sha256": "8045f8a606925edbc8c3a86c8fd985ec347c102739b2940ed4c8854e322e8f55",
+      "upstreamSha256": "4e1dfc3c22ed00f954a1f276f2d502b87883bdda5a14fae1b071486d6e3289a7"
+    }
+  ],
+  "submoduleGitTreeEntries": [
+    "160000 commit e61745a6b7add50d380cfd7d3883dd6c62fc2c71\tthirdparty/brotli",
+    "160000 commit 132f19b779828b194b3fede187cee719785db4d8\tthirdparty/freetype-2-10",
+    "160000 commit 153b6c222844c1cb2957fb3ad9e71ac2261dafed\tthirdparty/libsndfile"
+  ],
+  "qualifiedBundle": [
+    {
+      "path": "webmscore.js",
+      "bytes": 266198,
+      "sha256": "2c0c1f60c8f200acc86777a2b231626382bf1465777831f3b9a8fd4a29cc74c4"
+    },
+    {
+      "path": "webmscore.lib.data",
+      "bytes": 4113025,
+      "sha256": "5fe70ccfeec2791a9bb71c1a3a72f4e28c06380ff4a775b47d056248201bd171"
+    },
+    {
+      "path": "webmscore.lib.mem.wasm",
+      "bytes": 4158563,
+      "sha256": "68c2adb048b0ea4e97724967c46c9d95141f17a5c86239164004b14d3a2ba52b"
+    },
+    {
+      "path": "webmscore.lib.wasm",
+      "bytes": 9260573,
+      "sha256": "4f93395429f74803089a0cc591c4c9d58043c16ec5850f00697d105aef03e2ef"
+    }
+  ],
+  "toolchain": {
+    "emscripten": "2.0.6",
+    "qt": "5.15.2 wasm_32",
+    "node": "24.19.0",
+    "generator": "Ninja",
+    "buildType": "RELEASE",
+    "embedPreloads": false,
+    "cmakeBuildNumber": "78db5eb-baseline"
+  },
+  "qualification": {
+    "syntheticFlows": 29,
+    "explicitTimingChecks": 13,
+    "sourceSlurChecks": 9,
+    "additionalInheritanceAndDualSideChecks": 4,
+    "broadScores": 12,
+    "unchangedMidiTimelines": 11,
+    "sourceCorrectedMidiTimelines": 1,
+    "pixelIdenticalPdfPages": 13,
+    "wavExports": 3,
+    "androidRuntimeVerified": false,
+    "pairedDeploymentComplete": false
+  }
+}
