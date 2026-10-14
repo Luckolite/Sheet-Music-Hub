@@ -5,31 +5,36 @@ the qualified Music Sheets renderer candidate. It is separate from the Apache-2.
 standalone interpreter. This source publication does not announce a Hub release
 or claim that the candidate is deployed to Android or the desktop worker.
 
-The [reverse-slur source adoption record](adoptions/reverse-slur-20261014.json)
-identifies the newer bundle committed to Music Sheets source after full
-generated-style HTML qualification. Reconstruct that bundle by applying the
-parent patch below, then the supplemental patch in
-`unreleased/reverse-slur-completion`. The original parent manifest describes its
-original bundle; it is retained unchanged. Packaged Android/device and desktop
-rollout checks remain pending. This source update creates no Hub release.
+The latest [ornament and delayed-turn adoption record](adoptions/ornament-delayed-turn-20261014.json)
+identifies the rebuilt bundle committed in Music Sheets `2931b984`, retained by
+`2e0fdb9e`. It includes all five ordered supplemental source packets below.
+Thirteen synthetic browser cases, seven reverse-slur PNG/MIDI parity cases and
+six native save/reopen XML/MIDI/PNG cases qualified the bundle. Its four renderer
+assets also match those embedded in the verified full APK build. Render cache
+identity 40 invalidates older converted renderings.
+
+Android visual/haptic UX, whole-library accuracy, desktop deployment and final
+Library publication remain unverified. The prior
+[reverse-slur adoption record](adoptions/reverse-slur-20261014.json), original
+parent manifest, tags and published assets are preserved unchanged. This
+documentation update creates no Hub release.
 
 ## Reconstruct the complete source
 
-The separate [articulation/ornament importer draft](unreleased/articulation-ornament-import/README.md)
-is queued for a later renderer build. It is not part of the existing adopted
-bundle or its corresponding-source manifests.
+For the latest adopted bundle, apply the parent patch first, then these packets
+in order: `reverse-slur-completion`,
+[articulation/ornament import](unreleased/articulation-ornament-import/README.md),
+[ornament auxiliary state/layout](unreleased/ornament-auxiliaries/README.md),
+[auxiliary playback](unreleased/ornament-auxiliary-playback/README.md), and
+[delayed turns](unreleased/delayed-turn/README.md). Their original packet records
+describe the source-only evidence available at publication; the new adoption
+record adds subsequent build, synthetic runtime and app-asset verification.
 
-The subsequent [ornament auxiliary accidental draft](unreleased/ornament-auxiliaries/README.md)
-adds retained plain-ornament fields and collision bounds. It also remains separate
-from the adopted bundle pending the final renderer build and runtime checks.
-
-The [plain-ornament auxiliary playback draft](unreleased/ornament-auxiliary-playback/README.md)
-then connects those retained signs to legacy MIDI ornament pitches. It has source
-controls and syntax evidence; rebuilt renderer/runtime verification is pending.
-
-The [delayed-turn draft](unreleased/delayed-turn/README.md) then preserves native
-delay identity, places the glyph between note positions and reserves a principal
-lead before legacy MIDI turn notes. It also awaits final renderer qualification.
+The adoption record supplies exact public Git-blob hashes for source manifests
+as well as the original Windows qualification byte hashes. Their parsed JSON
+contents agree; line endings can make the byte hashes differ. Native source
+hashes follow the qualification's UTF-8 universal-newline-to-LF convention, and
+bundle hashes always cover exact bytes.
 
 Clone https://github.com/LibreScore/webmscore and check out commit
 `78db5eb5437ccf1d17e0c4820374ee12f8862ce9`. Initialize its pinned submodules

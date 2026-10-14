@@ -1,0 +1,118 @@
+{
+  "status": "ADOPTED_IN_APP_SOURCE_SYNTHETIC_RENDERER_AND_APK_ASSETS_VERIFIED_RELEASE_PENDING",
+  "license": "GPL-3.0-only",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "appRepository": "https://github.com/Luckolite/Music-Sheets",
+  "appSourceCommit": "2931b984c09217db73dd8235d2addf15cf57d0cb",
+  "retainedByAppCommit": "2e0fdb9e816d1768db596854039c627ef4fdd5c6",
+  "correspondingSourceCommit": "c08744cf4c0307c77ca288a19105029362ebcef0",
+  "orderedSourcePackets": [
+    "source/webmscore/corresponding-source.patch",
+    "source/webmscore/unreleased/reverse-slur-completion",
+    "source/webmscore/unreleased/articulation-ornament-import",
+    "source/webmscore/unreleased/ornament-auxiliaries",
+    "source/webmscore/unreleased/ornament-auxiliary-playback",
+    "source/webmscore/unreleased/delayed-turn"
+  ],
+  "sourceManifests": [
+    {
+      "path": "source/webmscore/manifest.json",
+      "qualifiedWorkingTreeByteSha256": "507b1e079c8c7619f561a2b01dcfcbc033d73ce63b781d1dc5d724c8c828fc90",
+      "repositoryBlobSha256": "50f075704dd67e4e36a93aa774002e7ede8006073abbe7d2c8bdb3fbc1df9723"
+    },
+    {
+      "path": "source/webmscore/unreleased/reverse-slur-completion/manifest.json",
+      "qualifiedWorkingTreeByteSha256": "c28bc93359c6f03b2a78277342d1587cebbac537baa60e84a9b6c9f5afd4be84",
+      "repositoryBlobSha256": "c28bc93359c6f03b2a78277342d1587cebbac537baa60e84a9b6c9f5afd4be84"
+    },
+    {
+      "path": "source/webmscore/unreleased/articulation-ornament-import/manifest.json",
+      "qualifiedWorkingTreeByteSha256": "8d2ef0be14b1d4f60abb35ecbb88d864c02f5b80a1f7ea2affae605703e1d736",
+      "repositoryBlobSha256": "c32093ba255e7552bd44ae3f94d681dc71eb9221e6a928c7c4fcd5869e77593a"
+    },
+    {
+      "path": "source/webmscore/unreleased/ornament-auxiliaries/manifest.json",
+      "qualifiedWorkingTreeByteSha256": "d04b2af3c01368a3189ffe930f3a76ff80d8be9105da40c685c7fa88474e26cc",
+      "repositoryBlobSha256": "d04b2af3c01368a3189ffe930f3a76ff80d8be9105da40c685c7fa88474e26cc"
+    },
+    {
+      "path": "source/webmscore/unreleased/ornament-auxiliary-playback/manifest.json",
+      "qualifiedWorkingTreeByteSha256": "392827b858c2fda1c2b68f1a2409daf4403c269bc5d072dc034693a41fb7ec55",
+      "repositoryBlobSha256": "392827b858c2fda1c2b68f1a2409daf4403c269bc5d072dc034693a41fb7ec55"
+    },
+    {
+      "path": "source/webmscore/unreleased/delayed-turn/manifest.json",
+      "qualifiedWorkingTreeByteSha256": "3fc23735d1e80e11216ff1eb8128a61c493201c7236211039ab1fde7476cdc64",
+      "repositoryBlobSha256": "3fc23735d1e80e11216ff1eb8128a61c493201c7236211039ab1fde7476cdc64"
+    }
+  ],
+  "sourceUtf8LfSha256": {
+    "build/cmake/GetPlatformInfo.cmake": "e98c18941543aa4568792fe4be5ab256e6311a45127b5172574caa6ce239d040",
+    "src/engraving/libmscore/chord.cpp": "9e37cede0e4312eeae8937bbb00bd84b5b7bc62ef988228df64cd511f17f5370",
+    "src/engraving/libmscore/chord.h": "f09d6807ba2d85b9be0f139d851358a38fcf293a06ce45def2725eb38e0e271b",
+    "src/engraving/libmscore/figuredbass.cpp": "28c306dbd50295a54c8f4038f1592dbc5d9726725125d5a35371fe363c43a4eb",
+    "src/engraving/libmscore/hairpin.cpp": "dc15183668a3e4121fe39d4170031856ea7263125b508fca4e0ba4e51a264d77",
+    "src/engraving/libmscore/hairpin.h": "c323ea7a756bb0d7ee70d0b87ed470cf029b43df9328331d50f91f8448ab2a91",
+    "src/engraving/libmscore/line.cpp": "e209be80d07883ef004a8b313c1d3691329df95101d62285e42d09c7d3d54c9e",
+    "src/engraving/libmscore/noteevent.cpp": "3acc869d477429245aa5c813fe64b6de01803854d6e84017f8cc1e23255fd45e",
+    "src/engraving/libmscore/noteevent.h": "8ef03085ec0ebd087fcbb8bbe84191e6c72588a10b8ff096790d967a2afa311a",
+    "src/engraving/libmscore/rendermidi.cpp": "b6d84916233c3aa5c7bf2c5e89841e7b9fe06b7a556c7032fb3066e77fd16536",
+    "src/engraving/libmscore/scorefile.cpp": "a9e6f6bc09961973077c1a60c61e89d454c0db417921051f7f5878b7cae0959a",
+    "src/engraving/libmscore/spanner.cpp": "18cee837461681dc26ab4aa696050c5e3c0f88889c5ee3cd164a14344fa56a4e",
+    "src/engraving/types/musicxmltimegrid.h": "587ee0c8b21573c1e786df6dd14e1d233129783b14ab3b44f82c39d3417389c4",
+    "src/framework/audio/internal/encoders/wavencoder.cpp": "1807be8ab1dc4258ac691c3d10e64dcd1ab15fa7b1ccb2cc796560bfa88dc93f",
+    "src/framework/audio/internal/synthesizers/fluidsynth/fluidsequencer.cpp": "4d7f862cdb4ca408d600de60406c1d17b75987efb0c50493092a73f38ed2c666",
+    "src/importexport/musicxml/internal/musicxml/exportxml.cpp": "181aa1f8928c86f083f7de6accfc50689e0223bcc6a5923361484c0b413daa2f",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "6bb5f2c40e6145866a3e148d24945bb724a7562ef7b4f6d630ac1a4eb59183c4",
+    "web/CMakeLists.txt": "21dcf0d0a20e70b438fbe812e14909322cd3fb0f5c1dd1e22f63de63fd1ef285",
+    "src/engraving/libmscore/articulation.cpp": "745776215e95258690fd3a263b438a55e48742dad9c9be8a962c254b5f49e5bc",
+    "src/engraving/libmscore/articulation.h": "6703b2a6b11ef0036f5943abf7dbf2df97f26474f42e061dda7f90c908d68c07",
+    "src/engraving/types/ornamentauxlayout.h": "c8452f6954f12c00e10b3c20a9b50b2f3cbb0df522d6f6651ebafc8fcbe43c7d",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.h": "72099a47b2468ec4a80dc88a39420d69c7ee221265a16c9c242f0080143cc4b0"
+  },
+  "activeBundle": [
+    {
+      "name": "webmscore.js",
+      "bytes": 266198,
+      "sha256": "85bf1ba9f9b0f22c417fa51d2e8d40658218e71b8c18b7638d4a0b9ccb8c0259"
+    },
+    {
+      "name": "webmscore.lib.wasm",
+      "bytes": 9265027,
+      "sha256": "9821f7a9962371e17251ce635b444b5507bd014e6dcfc80da037693497f3bb37"
+    },
+    {
+      "name": "webmscore.lib.mem.wasm",
+      "bytes": 4158915,
+      "sha256": "020ed73c8a82e2bdb68cdacfbab8fe2e6eb3ccb6b7fb49f2943fb0d6fd8aa99d"
+    },
+    {
+      "name": "webmscore.lib.data",
+      "bytes": 4113025,
+      "sha256": "5fe70ccfeec2791a9bb71c1a3a72f4e28c06380ff4a775b47d056248201bd171"
+    }
+  ],
+  "renderCacheVersion": 40,
+  "qualification": {
+    "browserCases": 13,
+    "baselineCases": 13,
+    "reverseSlurPngAndMidiParity": 7,
+    "nativeReopenXmlMidiPngParity": 6,
+    "sourceOrnamentIdentityAndAuxiliaryPreservation": true,
+    "delayedTurnMidiExactExpectedSequence": true,
+    "delayedTurnPngVisuallyReviewed": true,
+    "fullApkRendererAssetsVerified": true,
+    "androidVisualAndHapticUxVerified": false,
+    "wholeLibraryAccuracyAccepted": false,
+    "desktopDeploymentVerified": false,
+    "apkPublished": false
+  },
+  "hashConventions": {
+    "sourceFiles": "UTF-8 text with universal newline conversion to LF, including standalone CR",
+    "bundleFiles": "Exact bytes",
+    "repositoryBlobSha256": "Exact public Git blob bytes at correspondingSourceCommit",
+    "qualifiedWorkingTreeByteSha256": "Exact Windows qualification bytes; JSON semantic equality with repository blob verified"
+  },
+  "originalAdoptionRecordsAndPublishedAssetsPreserved": true,
+  "hubTaggedReleaseCreated": false
+}
