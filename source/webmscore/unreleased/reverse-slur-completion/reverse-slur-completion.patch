@@ -1,0 +1,36 @@
+--- a/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
++++ b/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
+@@ -5633,10 +5633,32 @@
+             // slur start when slur already started: report error
+             logger->logError(QString("ignoring duplicate slur start"), xmlreader);
+         } else if (slurs[slurNo].isStop()) {
+-            // slur start when slur already stopped: wrap up
++            // MusicXML document order may put the stop before the start across voices.
++            // Preserve the absolute stop while setting the start, then register the
++            // completed span just as the ordinary start-first path does.
+             auto newSlur = slurs[slurNo].slur();
++            const auto stopTick = newSlur->tick2();
+             newSlur->setTick(Fraction::fromTicks(tick));
++            newSlur->setTick2(stopTick);
+             newSlur->setStartElement(cr);
++            newSlur->setTrack(track);
++            auto* end = toChordRest(newSlur->endElement());
++            newSlur->setTrack2(end->track());
++            if (cr->isGrace() || end->isGrace()) {
++                newSlur->setAnchor(Spanner::Anchor::CHORD);
++            }
++            if (lineType == "dotted") {
++                newSlur->setStyleType(SlurStyleType::Dotted);
++            } else if (lineType == "dashed") {
++                newSlur->setStyleType(SlurStyleType::Dashed);
++            }
++            const auto pl = notation.attribute("placement");
++            if (pl == "above") {
++                newSlur->setSlurDirection(DirectionV::UP);
++            } else if (pl == "below") {
++                newSlur->setSlurDirection(DirectionV::DOWN);
++            }
++            score->addElement(newSlur);
+             slurs[slurNo] = SlurDesc();
+         } else {
+             // slur start for new slur: init

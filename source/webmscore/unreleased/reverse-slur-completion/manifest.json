@@ -1,0 +1,25 @@
+{
+  "status": "UNRELEASED_SOURCE_DRAFT_NOT_BUILT_OR_DEPLOYED",
+  "license": "GPL-3.0-only",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "sourcePath": "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp",
+  "beforeUtf8LfSha256": "9d0771e83bfe7b13c917d2d1cd7d7eb437b923978b24d59f5455100dec3c5650",
+  "afterUtf8LfSha256": "b4be03db20d5641e785cb07276b5fed4718d329460c2357f5788a40635591968",
+  "beforeFunctionSha256": "4cf2d494c2e5148ac60e0af76cef96d9079fdeffdc553420ec11a7699472e22d",
+  "parentManifestSha256": "507b1e079c8c7619f561a2b01dcfcbc033d73ce63b781d1dc5d724c8c828fc90",
+  "files": {
+    "reverse-slur-completion.patch": "2c86029b34c18a36bba6943923afe6b4334885884c35b6cf24ee1dbcc3198c16",
+    "check_state.py": "31da52e952511ecb663d18c4dea03047b35f30570c54ab606d7afee3f12057dc",
+    "state-harness.cpp": "4686c0eee352bab68cd402e05c0af32551ae215c8f691886901bc20b1e354410",
+    "fixtures/disjoint-musical-cross-staff.musicxml": "700e1afe34e841ec7eceff0a2933196163fa18a5236a7e7364f252c1caef7de4",
+    "fixtures/forward-cross-staff.musicxml": "716581ff2bb4da352830e7ac3131df86781ef808ba095019c5694cc5e49c46c7",
+    "fixtures/reverse-cross-staff.musicxml": "9ef8b3cceca40a43607c20fc624696e559d83aab7e54892393331c7bd4ae913b",
+    "README.md": "47325331577d2551fbb55864cd5d4ed8fdabeddce5cd628488261e59876f952a"
+  },
+  "stateControls": 10,
+  "baselineFailedControls": 8,
+  "actualImporterSyntaxPassed": true,
+  "rendererBinaryBuilt": false,
+  "runtimeFixProven": false,
+  "productionAssetsChanged": false
+}
