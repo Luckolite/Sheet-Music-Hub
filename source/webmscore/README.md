@@ -5,6 +5,14 @@ the qualified Music Sheets renderer candidate. It is separate from the Apache-2.
 standalone interpreter. This source publication does not announce a Hub release
 or claim that the candidate is deployed to Android or the desktop worker.
 
+The [reverse-slur source adoption record](adoptions/reverse-slur-20261014.json)
+identifies the newer bundle committed to Music Sheets source after full
+generated-style HTML qualification. Reconstruct that bundle by applying the
+parent patch below, then the supplemental patch in
+`unreleased/reverse-slur-completion`. The original parent manifest describes its
+original bundle; it is retained unchanged. Packaged Android/device and desktop
+rollout checks remain pending. This source update creates no Hub release.
+
 ## Reconstruct the complete source
 
 Clone https://github.com/LibreScore/webmscore and check out commit

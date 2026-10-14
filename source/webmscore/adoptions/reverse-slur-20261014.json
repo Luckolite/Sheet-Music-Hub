@@ -1,0 +1,52 @@
+{
+  "status": "ADOPTED_IN_APP_SOURCE_PACKAGED_RUNTIME_PENDING",
+  "license": "GPL-3.0-only",
+  "appSourceCommit": "ed4f77b39618ed09bab932a1b2a1a1949eeb02b7",
+  "appRepository": "https://github.com/Luckolite/Music-Sheets",
+  "correspondingSourceCommit": "29aa0ae791e4bb7f3bda666adca23a66078117c4",
+  "parentSourcePacket": "source/webmscore",
+  "supplementalSourcePacket": "source/webmscore/unreleased/reverse-slur-completion",
+  "reconstruction": "Follow the parent README, then apply the supplemental reverse-slur-completion.patch. The parent manifest and original published assets remain unchanged.",
+  "importerUtf8LfSha256": "b4be03db20d5641e785cb07276b5fed4718d329460c2357f5788a40635591968",
+  "activeBundle": [
+    {
+      "name": "webmscore.js",
+      "bytes": 266198,
+      "sha256": "490f0d6c73b738c24ffb6a1b8c3b6ab6662e68318664799adb7d047290d5ed88"
+    },
+    {
+      "name": "webmscore.lib.wasm",
+      "bytes": 9260797,
+      "sha256": "d53612aa65ec6dd516a2283c4303153a91c2c58ad8fdb47149daba778bfbab7f"
+    },
+    {
+      "name": "webmscore.lib.mem.wasm",
+      "bytes": 4158579,
+      "sha256": "e9ecabf08a806a2829b830bb33dacdba0b87c761a37e8a81a35c7e9f373e5bfd"
+    },
+    {
+      "name": "webmscore.lib.data",
+      "bytes": 4113025,
+      "sha256": "5fe70ccfeec2791a9bb71c1a3a72f4e28c06380ff4a775b47d056248201bd171"
+    }
+  ],
+  "qualification": {
+    "fullProductionHtmlCases": 8,
+    "actualJavaGeneratedStyleBridge": true,
+    "originalPublicCases": 7,
+    "originalPublicWrittenNotes": 40,
+    "originalPublicSlurs": 20,
+    "originalPublicEndpointsGraceBudgetsAndStylesExact": true,
+    "fiveReverseCasesRecoverOneLostSlurEach": true,
+    "allEightParsedMidiTimelinesExactFromPriorEngine": true,
+    "additionalRetainedPageStyleAndHairpinPathPassed": true,
+    "headlessBrowser": true,
+    "androidRuntimeVerified": false,
+    "apkPublished": false,
+    "desktopDeploymentVerified": false
+  },
+  "privacy": "Only original synthetic fixtures and aggregate qualification are public; no commercial score pages, library identifiers, logs or captured masks are included.",
+  "releaseCreated": false,
+  "appIntegrationCommit": "b61f2fd4579ade49c311bb751c9ad0f77b2a0c12",
+  "generatedBundleExactBytesAcrossCheckouts": true
+}
