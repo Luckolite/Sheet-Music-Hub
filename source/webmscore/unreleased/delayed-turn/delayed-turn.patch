@@ -1,0 +1,258 @@
+--- a/src/engraving/libmscore/articulation.h
++++ b/src/engraving/libmscore/articulation.h
+@@ -112,6 +112,8 @@
+     PointF _symbolDrawOffset;
+     PointF _ornamentAuxAbovePos;
+     PointF _ornamentAuxBelowPos;
++    bool readDelayedTurn(XmlReader& e);
++    void writeDelayedTurn(XmlWriter& xml) const;
+     bool readOrnamentAuxiliary(XmlReader& e);
+     void writeOrnamentAuxiliaries(XmlWriter& xml) const;
+     DirectionV _direction;
+@@ -125,6 +127,7 @@
+     bool _up;
+     OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
+     bool _playArticulation;
++    bool _delayedTurn = false;
+ 
+     std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
+ 
+@@ -197,6 +200,9 @@
+     OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
+     void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
+ 
++    bool delayedTurn() const { return _delayedTurn && (_symId == SymId::ornamentTurn || _symId == SymId::ornamentTurnInverted); }
++    void setDelayedTurn(bool value) { _delayedTurn = value; }
++
+     bool playArticulation() const { return _playArticulation; }
+     void setPlayArticulation(bool val) { _playArticulation = val; }
+ 
+--- a/src/engraving/libmscore/articulation.cpp
++++ b/src/engraving/libmscore/articulation.cpp
+@@ -109,6 +109,18 @@
+ //   ornament auxiliaries
+ //---------------------------------------------------------
+ 
++bool Articulation::readDelayedTurn(XmlReader& e)
++{
++    if (AsciiStringView(e.name()) != "delayedTurn") return false;
++    setDelayedTurn(e.readBool());
++    return true;
++}
++
++void Articulation::writeDelayedTurn(XmlWriter& xml) const
++{
++    if (delayedTurn()) xml.tag("delayedTurn", true);
++}
++
+ bool Articulation::readOrnamentAuxiliary(XmlReader& e)
+ {
+     const AsciiStringView tag(e.name());
+@@ -236,6 +248,7 @@
+             }
+             setSymId(id);
+         }
++    } else if (readDelayedTurn(e)) {
+     } else if (readOrnamentAuxiliary(e)) {
+     } else if (tag == "channel") {
+         _channelName = e.attribute("name");
+@@ -281,6 +294,7 @@
+     }
+ 
+     writeOrnamentAuxiliaries(xml);
++    writeDelayedTurn(xml);
+     writeProperty(xml, Pid::PLAY);
+     writeProperty(xml, Pid::ORNAMENT_STYLE);
+     for (const StyledProperty& spp : *styledProperties()) {
+--- a/src/engraving/libmscore/chord.cpp
++++ b/src/engraving/libmscore/chord.cpp
+@@ -3889,6 +3889,16 @@
+ //    To be finished after laying out slurs
+ //---------------------------------------------------------
+ 
++static double delayedTurnX(const Chord* chord, double x)
++{
++    if (chord->isGrace() || !chord->segment() || !chord->measure()) return x;
++    Segment* next = chord->segment()->nextCR(chord->track());
++    double endX = chord->measure()->width() - chord->segment()->x() - chord->x();
++    if (next && next->measure() == chord->measure())
++        endX = next->x() - chord->segment()->x() - chord->x();
++    return x + std::max(0.0, endX - x) * 0.5;
++}
++
+ void Chord::layoutArticulations2()
+ {
+     for (Chord* gc : graceNotes()) {
+@@ -3903,6 +3913,8 @@
+     double staffDist = score()->styleMM(Sid::propertyDistance);
+     double stemDist = score()->styleMM(Sid::propertyDistanceStem);
+     double noteDist = score()->styleMM(Sid::propertyDistanceHead);
++    double delayedX = delayedTurnX(this, x);
++
+ 
+     double chordTopY = upPos() - 0.5 * upNote()->headHeight();      // note position of highest note
+     double chordBotY = downPos() + 0.5 * upNote()->headHeight();    // note position of lowest note
+@@ -3948,7 +3960,7 @@
+         if (a->up()) {
+             if (!a->layoutCloseToNote()) {
+                 a->layout();
+-                a->setPos(x, chordTopY);
++                a->setPos(a->delayedTurn() ? delayedX : x, chordTopY);
+                 a->doAutoplace();
+             }
+             if (a->visible()) {
+@@ -3957,7 +3969,7 @@
+         } else {
+             if (!a->layoutCloseToNote()) {
+                 a->layout();
+-                a->setPos(x, chordBotY + abs(a->bbox().top()));
++                a->setPos(a->delayedTurn() ? delayedX : x, chordBotY + abs(a->bbox().top()));
+                 a->doAutoplace();
+             }
+             if (a->visible()) {
+@@ -3978,12 +3990,12 @@
+             || (aa == ArticulationAnchor::CHORD && !a->layoutCloseToNote())) {
+             a->layout();
+             if (a->up()) {
+-                a->setPos(x, staffTopY);
++                a->setPos(a->delayedTurn() ? delayedX : x, staffTopY);
+                 if (a->visible()) {
+                     staffTopY = a->y() - a->height() - minDist;
+                 }
+             } else {
+-                a->setPos(x, staffBotY);
++                a->setPos(a->delayedTurn() ? delayedX : x, staffBotY);
+                 if (a->visible()) {
+                     staffBotY = a->y() + a->height() + minDist;
+                 }
+--- a/src/engraving/libmscore/rendermidi.cpp
++++ b/src/engraving/libmscore/rendermidi.cpp
+@@ -1495,7 +1495,8 @@
+                             const std::vector<int>& prefix, const std::vector<int>& body,
+                             bool repeatp, bool sustainp, const std::vector<int>& suffix,
+                             int fastestFreq=64, int slowestFreq=8, // 64 Hz and 8 Hz
+-                            SymId upperAuxiliary=SymId::noSym, SymId lowerAuxiliary=SymId::noSym
++                            SymId upperAuxiliary=SymId::noSym, SymId lowerAuxiliary=SymId::noSym,
++                            bool delayedTurn=false
+                             )
+ {
+     events->clear();
+@@ -1511,10 +1512,11 @@
+     int b = int(body.size());
+     int s = int(suffix.size());
+     int gna = int(note->chord()->graceNotesAfter().size());
++    int lead = delayedTurn ? 1 : 0;
+ 
+     int ticksPerNote = 0;
+ 
+-    if (gnb + p + b + s + gna <= 0) {
++    if (gnb + p + b + s + gna + lead <= 0) {
+         return false;
+     }
+ 
+@@ -1552,12 +1554,12 @@
+         }
+     }
+     // calculate whether to shorten the duration value.
+-    if (ticksPerNote * (gnb + p + b + s + gna) <= maxticks) {
++    if (ticksPerNote * (gnb + p + b + s + gna + lead) <= maxticks) {
+         // plenty of space to play the notes without changing the requested trill note duration
+     } else if (ticksPerNote == minTicksPerNote) {
+         return false;     // the ornament is impossible to implement respecting the minimum duration and all the notes it contains
+     } else {
+-        ticksPerNote = maxticks / (gnb + p + b + s + gna);      // integer division ignoring remainder
++        ticksPerNote = maxticks / (gnb + p + b + s + gna + lead);      // integer division ignoring remainder
+         if (slowestFreq <= 0) {
+         } else if (ticksPerNote < minTicksPerNote) {
+             return false;
+@@ -1622,10 +1624,15 @@
+         numrepeat = (space - millespernote * (gnb + p + s + gna)) / (millespernote * b);
+     }
+     if (sustainp) {
+-        sustain   = space - millespernote * (gnb + p + numrepeat * b + s + gna);
++        sustain   = space - millespernote * (gnb + p + numrepeat * b + s + gna + lead);
+     }
+     // render the graceNotesBefore
+     ontime = graceExtend(note->pitch(), note->chord()->graceNotesBefore(), ontime);
++
++    if (delayedTurn) {
++        ontime = makeEvent(0, ontime, millespernote + sustain);
++        sustain = 0;
++    }
+ 
+     // render the prefix
+     for (int j=0; j < p; j++) {
+@@ -1757,7 +1764,7 @@
+ //---------------------------------------------------------
+ 
+ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, OrnamentStyle ornamentStyle,
+-                            SymId upperAuxiliary=SymId::noSym, SymId lowerAuxiliary=SymId::noSym)
++                            SymId upperAuxiliary=SymId::noSym, SymId lowerAuxiliary=SymId::noSym, bool delayedTurn=false)
+ {
+     if (!note->staff()->isPitchedStaff(note->tick())) { // not enough info in tab staff
+         return false;
+@@ -1769,7 +1776,9 @@
+                                              || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
+             return renderNoteArticulation(events, note, chromatic, oe.duration,
+                                           oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix,
+-                                          64, 8, upperAuxiliary, lowerAuxiliary);
++                                          64, 8, upperAuxiliary, lowerAuxiliary,
++                                          delayedTurn && (articulationType == SymId::ornamentTurn
++                                                          || articulationType == SymId::ornamentTurnInverted));
+         }
+     }
+     return false;
+@@ -1901,7 +1910,7 @@
+                     continue;
+                 }
+                 if (!renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle(),
+-                                            a->ornamentAuxiliary(true), a->ornamentAuxiliary(false))) {
++                                            a->ornamentAuxiliary(true), a->ornamentAuxiliary(false), a->delayedTurn())) {
+                     instr->updateGateTime(&gateTime, channel, a->articulationName());
+                 }
+             }
+--- a/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
++++ b/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
+@@ -1036,6 +1036,7 @@
+     Articulation* na = Factory::createArticulation(cr);
+     na->setSymId(articSym);
+     applyOrnamentAuxiliaries(notation, na);
++    na->setDelayedTurn(notation.name() == "delayed-turn" || notation.name() == "delayed-inverted-turn");
+ 
+     if (!dir.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
+         na->setUp(dir.isEmpty() || dir == "up");
+@@ -6470,9 +6471,6 @@
+             } else if (notation.name() == "harmonic" || notation.name() == "delayed-turn"
+                        || notation.name() == "turn" || notation.name() == "inverted-turn"
+                        || notation.name() == "delayed-inverted-turn") {
+-                if (notation.name() == "delayed-turn") {
+-                    // TODO: actually this should be offset a bit to the right
+-                }
+                 if (placement != "above" && placement != "below") {
+                     placement = (const char*)0;
+                     _logger->logError(QString("unknown %1 placement %2").arg(notation.name(), placement), &_e);
+--- a/src/importexport/musicxml/internal/musicxml/exportxml.cpp
++++ b/src/importexport/musicxml/internal/musicxml/exportxml.cpp
+@@ -2999,6 +2999,13 @@
+ //   chordAttributes
+ //---------------------------------------------------------
+ 
++static QString articulationOrnamentXml(const Articulation* articulation)
++{
++    if (articulation->delayedTurn())
++        return articulation->symId() == SymId::ornamentTurn ? "delayed-turn" : "delayed-inverted-turn";
++    return symIdToOrnam(articulation->symId());
++}
++
+ static const char* ornamentAuxiliaryXml(SymId symbol)
+ {
+     switch (symbol) {
+@@ -3070,7 +3077,7 @@
+         }
+ 
+         auto sid = a->symId();
+-        auto mxmlOrnam = symIdToOrnam(sid);
++        auto mxmlOrnam = articulationOrnamentXml(a);
+ 
+         if (mxmlOrnam != "") {
+             notations.tag(_xml, a);

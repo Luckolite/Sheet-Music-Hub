@@ -27,6 +27,10 @@ The [plain-ornament auxiliary playback draft](unreleased/ornament-auxiliary-play
 then connects those retained signs to legacy MIDI ornament pitches. It has source
 controls and syntax evidence; rebuilt renderer/runtime verification is pending.
 
+The [delayed-turn draft](unreleased/delayed-turn/README.md) then preserves native
+delay identity, places the glyph between note positions and reserves a principal
+lead before legacy MIDI turn notes. It also awaits final renderer qualification.
+
 Clone https://github.com/LibreScore/webmscore and check out commit
 `78db5eb5437ccf1d17e0c4820374ee12f8862ce9`. Initialize its pinned submodules
 with `git submodule update --init --recursive`. From that checkout, apply this
