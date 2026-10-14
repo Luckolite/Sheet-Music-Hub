@@ -14,8 +14,13 @@
     "fixtures/disjoint-musical-cross-staff.musicxml": "700e1afe34e841ec7eceff0a2933196163fa18a5236a7e7364f252c1caef7de4",
     "fixtures/forward-cross-staff.musicxml": "716581ff2bb4da352830e7ac3131df86781ef808ba095019c5694cc5e49c46c7",
     "fixtures/reverse-cross-staff.musicxml": "9ef8b3cceca40a43607c20fc624696e559d83aab7e54892393331c7bd4ae913b",
-    "README.md": "cfd3a55d63191bbcb5549ccbc05dba07591c0f62325d0038e7c594c17573252c",
-    ".gitattributes": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    "README.md": "582157a3d131eeb400cd5c4a51743806aa2334a1a4b0eb58d7fd6d2caaed22f6",
+    ".gitattributes": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae",
+    "fixtures/reverse-after-grace-stop.musicxml": "39825dc5892fb3416e38b35f85377198c11c142bfded44e1f7676aabe94ab6b3",
+    "fixtures/reverse-before-grace-start.musicxml": "d1b60bf190ce15aa8fb916853579cf95101535d0b22f79d11504296961cec000",
+    "fixtures/reverse-dashed-below.musicxml": "8c352962136afc84c3cdb856e752640ee7b25ace9764c5322b6812e661aa95e2",
+    "fixtures/reverse-dotted-above.musicxml": "f83c53f17873994adb9f57812e19f162ac8758e0d6329d29e75074fc382b1c79",
+    "check_xml.py": "4bf39a2f2ce872192a320e7222f9d0c67e0d5e2671c9e1204ef6c8111d9a9525"
   },
   "stateControls": 10,
   "baselineFailedControls": 8,
@@ -49,13 +54,46 @@
     }
   ],
   "boundedQualification": {
-    "sourceNotes": 16,
-    "sourceArcs": 8,
-    "sourceCases": 3,
-    "importComparisons": 6,
-    "nativeReloadFlows": 6,
+    "sourceNotes": 40,
+    "sourceArcs": 20,
+    "sourceCases": 7,
+    "importComparisons": 14,
+    "nativeReloadFlows": 10,
     "exactSourceEndpoints": true,
-    "parsedMidiExact": true
+    "parsedMidiExact": true,
+    "graceBudgetsExact": true,
+    "lineStylesExact": true,
+    "comparisonCropsReviewed": true
   },
-  "reverseGraceAndLineTypesRuntimeQualified": false
+  "reverseGraceAndLineTypesRuntimeQualified": true,
+  "fixtureCounts": {
+    "disjoint-musical-cross-staff": [
+      4,
+      2
+    ],
+    "forward-cross-staff": [
+      6,
+      3
+    ],
+    "reverse-cross-staff": [
+      6,
+      3
+    ],
+    "reverse-after-grace-stop": [
+      6,
+      3
+    ],
+    "reverse-before-grace-start": [
+      6,
+      3
+    ],
+    "reverse-dashed-below": [
+      6,
+      3
+    ],
+    "reverse-dotted-above": [
+      6,
+      3
+    ]
+  }
 }

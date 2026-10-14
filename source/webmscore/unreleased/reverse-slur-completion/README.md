@@ -24,24 +24,25 @@ translation unit also passed syntax checking against its configured Qt headers.
 These checks do not prove actual score layout, lifetime management or runtime
 preservation in a newly built renderer.
 
-The three original MusicXML controls contain no library or commercial material.
+The seven original MusicXML controls contain no library or commercial material.
 They test two musically disjoint cross-staff slurs, forward cross-staff overlap,
 and a reversed cross-staff span between two shorter arcs. Their score content is
 dedicated to the public domain under CC0-1.0. The state harness and checker are
 Copyright 2026 Luckolite, GPL-3.0-only; the patch preserves upstream GPL licensing.
 
 The existing cached renderer imports only two of the three reversed-case arcs.
-A private incremental renderer candidate now retains all eight source-owned arcs
-and sixteen written notes across the three original controls, including the
+A private incremental renderer candidate now retains all twenty source-owned arcs
+and forty written notes across seven original controls, including the
 reversed cross-staff span. Native save/reload preserves their exact endpoints.
 Parsed MIDI notes, clocks, tempo maps and controllers match the prior engine.
-Six import comparisons and six native reload flows completed without console
+Fourteen import comparisons and ten native reload flows completed without console
 warnings; the writer's invalid overlapping-ID baseline remains intentionally
 unrepaired by this importer patch.
 
 This is bounded qualification of the bare headless renderer, not the complete
-generated-style pipeline, packaged Android runtime or desktop deployment. The
-reverse-grace and dashed/dotted controls still have state-level evidence only.
+generated-style pipeline, packaged Android runtime or desktop deployment. Reversed before/after-grace endpoints and dashed/dotted above/below styles
+also preserve their exact source endpoints, printed grace budgets and MIDI.
+Aligned before/after render crops were reviewed for the four added controls.
 The private candidate's four bundle hashes are recorded separately in this
 draft manifest. No candidate binaries are published or adopted into the app.
 The parent corresponding-source patch, existing qualified bundle manifest,
@@ -49,3 +50,17 @@ notices, published assets and releases remain unchanged. Broader rendering,
 style/voice ownership and packaged checks are required before asset adoption.
 
 Specification: https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/number-level/
+
+## Compare exported source identities
+
+After importing and exporting the seven original fixtures with a rebuilt bundle,
+place each exported file in one directory as `<fixture-name>.musicxml`, then run:
+
+```text
+python check_xml.py --exports <export-directory> --report <report.json>
+```
+
+Without `--exports`, the checker validates the original fixture counts and endpoint
+pairing. It handles a stop preceding its start in document order and checks written
+notes, explicit grace budgets, endpoint identities, placement and line styles.
+It does not prove renderer voice labels, arbitrary polyphony or whole-score accuracy.
