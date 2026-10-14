@@ -15,6 +15,10 @@ rollout checks remain pending. This source update creates no Hub release.
 
 ## Reconstruct the complete source
 
+The separate [articulation/ornament importer draft](unreleased/articulation-ornament-import/README.md)
+is queued for a later renderer build. It is not part of the existing adopted
+bundle or its corresponding-source manifests.
+
 Clone https://github.com/LibreScore/webmscore and check out commit
 `78db5eb5437ccf1d17e0c4820374ee12f8862ce9`. Initialize its pinned submodules
 with `git submodule update --init --recursive`. From that checkout, apply this

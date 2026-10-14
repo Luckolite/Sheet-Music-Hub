@@ -1,0 +1,34 @@
+{
+  "status": "UNRELEASED_SOURCE_ONLY_NOT_BUILT_OR_ADOPTED",
+  "license": "GPL-3.0-only",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "sourcePath": "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp",
+  "beforeUtf8LfSha256": "b4be03db20d5641e785cb07276b5fed4718d329460c2357f5788a40635591968",
+  "afterUtf8LfSha256": "67c2c5bb9d61d3f8af3b08a58182c6547d80e03bae9df42ae10fa7f6d3e087f2",
+  "requires": [
+    "../../corresponding-source.patch",
+    "../reverse-slur-completion/reverse-slur-completion.patch"
+  ],
+  "beforeFunctions": {
+    "void setElementPropertyFlags(": "73af0fc54288ace55e231ec5b6bceb29a8fbd50a056558278fc119825b9a82f6",
+    "void addArticulationToChord(": "d6bdf87aac6fa929252dff54fa4daa1b9c8287e15e4e8cdefd536947ec209320",
+    "bool convertArticulationToSymId(": "5c95d0e3095c56baf559b5d9ddee53ed2ef5dc531786ed699beadc0ec9d85b91"
+  },
+  "stateControls": 16,
+  "baselineFailedControls": 7,
+  "actualImporterSyntaxPassed": true,
+  "rendererBinaryBuilt": false,
+  "productionAssetsChanged": false,
+  "runtimeFixProven": false,
+  "packagedAndroidQualified": false,
+  "sourceFixtures": "Original logical scores, CC0-1.0",
+  "files": {
+    ".gitattributes": "33679daf94e418f3cf9ec33d55170a7c23a0d12c0a9d3f3dff41c1a8c0be7fcb",
+    "check_state.py": "61bb87c6dd117188a30308e9587c6d1ac6c0cc8c59b9c10a16813a966dcb65f2",
+    "fixtures/below-articulations.musicxml": "5da364680a84bbc9f11e3b5142918d8bdb1e46f026215be56369bded7a14fd30",
+    "fixtures/delayed-inverted-turn.musicxml": "f33640491a88fbf63a5b5787d788648c83b5d8b08bbd3fa3e63e63312a62a4ae",
+    "importer.patch": "38b13b7e63437c86563f28cb721cd51eac6530aaa1405a26617fab5c22db744e",
+    "README.md": "33b7e5ee492ba448717eb5710785ad45d74cf2d63f3fde12207bf85edba7c781",
+    "state-harness.cpp": "981ef90b035c05ef855f144d6d81234ac2cc127986d3347ddf26d3d4d29534a3"
+  }
+}
