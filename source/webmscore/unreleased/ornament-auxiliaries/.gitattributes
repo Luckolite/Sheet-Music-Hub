@@ -1,0 +1,5 @@
+*.patch text eol=lf whitespace=-blank-at-eol
+*.cpp text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.musicxml text eol=lf

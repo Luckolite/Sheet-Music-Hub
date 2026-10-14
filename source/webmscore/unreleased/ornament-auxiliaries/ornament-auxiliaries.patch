@@ -1,0 +1,322 @@
+--- a/src/engraving/libmscore/articulation.cpp
++++ b/src/engraving/libmscore/articulation.cpp
+@@ -26,6 +26,7 @@
+ #include "rw/compat/read206.h"
+ #include "rw/xml.h"
+ #include "types/symnames.h"
++#include "types/ornamentauxlayout.h"
+ #include "types/translatablestring.h"
+ 
+ #include "chordrest.h"
+@@ -102,6 +103,46 @@
+     setupShowOnTabStyles();
+     _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
+     m_textType = TextType::NO_TEXT;
++}
++
++//---------------------------------------------------------
++//   ornament auxiliaries
++//---------------------------------------------------------
++
++bool Articulation::readOrnamentAuxiliary(XmlReader& e)
++{
++    const AsciiStringView tag(e.name());
++    if (tag != "ornamentAuxiliaryAbove" && tag != "ornamentAuxiliaryBelow") return false;
++    bool above = tag == "ornamentAuxiliaryAbove";
++    setOrnamentAuxiliary(SymNames::symIdByName(e.readAsciiText()), above);
++    return true;
++}
++
++void Articulation::writeOrnamentAuxiliaries(XmlWriter& xml) const
++{
++    if (isOrnament()) {
++        if (_ornamentAuxAbove != SymId::noSym)
++            xml.tag("ornamentAuxiliaryAbove", SymNames::nameForSymId(_ornamentAuxAbove));
++        if (_ornamentAuxBelow != SymId::noSym)
++            xml.tag("ornamentAuxiliaryBelow", SymNames::nameForSymId(_ornamentAuxBelow));
++    }
++}
++
++void Articulation::setOrnamentAuxiliary(SymId symbol, bool above)
++{
++    switch (symbol) {
++    case SymId::noSym:
++    case SymId::accidentalFlat:
++    case SymId::accidentalNatural:
++    case SymId::accidentalSharp:
++    case SymId::accidentalDoubleFlat:
++    case SymId::accidentalDoubleSharp:
++        break;
++    default:
++        symbol = SymId::noSym;
++        break;
++    }
++    (above ? _ornamentAuxAbove : _ornamentAuxBelow) = symbol;
+ }
+ 
+ //---------------------------------------------------------
+@@ -195,6 +236,7 @@
+             }
+             setSymId(id);
+         }
++    } else if (readOrnamentAuxiliary(e)) {
+     } else if (tag == "channel") {
+         _channelName = e.attribute("name");
+         e.readNext();
+@@ -238,6 +280,7 @@
+         xml.tag("subtype", SymNames::nameForSymId(_symId));
+     }
+ 
++    writeOrnamentAuxiliaries(xml);
+     writeProperty(xml, Pid::PLAY);
+     writeProperty(xml, Pid::ORNAMENT_STYLE);
+     for (const StyledProperty& spp : *styledProperties()) {
+@@ -285,7 +328,13 @@
+         painter->setFont(scaledFont);
+         painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, artTypeToInfo.at(m_textType).text);
+     } else {
+-        drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
++        drawSymbol(_symId, painter, _symbolDrawOffset);
++        if (isOrnament()) {
++            if (_ornamentAuxAbove != SymId::noSym)
++                drawSymbol(_ornamentAuxAbove, painter, _ornamentAuxAbovePos, ornament_aux::scale);
++            if (_ornamentAuxBelow != SymId::noSym)
++                drawSymbol(_ornamentAuxBelow, painter, _ornamentAuxBelowPos, ornament_aux::scale);
++        }
+     }
+ }
+ 
+@@ -362,7 +411,25 @@
+         bRect = symBbox(_symId);
+     }
+ 
+-    setbbox(bRect.translated(-0.5 * bRect.width(), 0.0));
++    _symbolDrawOffset = PointF(-0.5 * bRect.width(), 0.0);
++    bRect = bRect.translated(_symbolDrawOffset);
++    // Include the complete ornament in the skyline, without moving the base glyph.
++    if (m_textType == TextType::NO_TEXT && isOrnament()) {
++        ornament_aux::Box base { bRect.x(), bRect.y(), bRect.width(), bRect.height() };
++        for (bool above : { true, false }) {
++            SymId symbol = ornamentAuxiliary(above);
++            if (symbol == SymId::noSym) continue;
++            RectF raw = symBbox(symbol);
++            ornament_aux::Box accidental { raw.x() * ornament_aux::scale,
++                raw.y() * ornament_aux::scale, raw.width() * ornament_aux::scale,
++                raw.height() * ornament_aux::scale };
++            auto placed = ornament_aux::place(base, accidental, above, 0.25 * spatium());
++            (above ? _ornamentAuxAbovePos : _ornamentAuxBelowPos) = PointF(placed.x, placed.y);
++            bRect = bRect.united(RectF(placed.bounds.x, placed.bounds.y,
++                                      placed.bounds.width, placed.bounds.height));
++        }
++    }
++    setbbox(bRect);
+ }
+ 
+ bool Articulation::isHiddenOnTabStaff() const
+--- a/src/engraving/libmscore/articulation.h
++++ b/src/engraving/libmscore/articulation.h
+@@ -107,6 +107,13 @@
+ private:
+ 
+     SymId _symId;
++    SymId _ornamentAuxAbove = SymId::noSym;
++    SymId _ornamentAuxBelow = SymId::noSym;
++    PointF _symbolDrawOffset;
++    PointF _ornamentAuxAbovePos;
++    PointF _ornamentAuxBelowPos;
++    bool readOrnamentAuxiliary(XmlReader& e);
++    void writeOrnamentAuxiliaries(XmlWriter& xml) const;
+     DirectionV _direction;
+     String _channelName;
+ 
+@@ -149,6 +156,8 @@
+ 
+     SymId symId() const { return _symId; }
+     void setSymId(SymId id);
++    SymId ornamentAuxiliary(bool above) const { return above ? _ornamentAuxAbove : _ornamentAuxBelow; }
++    void setOrnamentAuxiliary(SymId symbol, bool above);
+     int subtype() const override;
+     void setTextType(TextType textType);
+     TranslatableString typeUserName() const override;
+--- /dev/null
++++ b/src/engraving/types/ornamentauxlayout.h
+@@ -0,0 +1,18 @@
++// Copyright 2026 Luckolite
++// SPDX-License-Identifier: GPL-3.0-only
++#ifndef MU_ENGRAVING_ORNAMENT_AUX_LAYOUT_H
++#define MU_ENGRAVING_ORNAMENT_AUX_LAYOUT_H
++namespace mu { namespace engraving { namespace ornament_aux {
++constexpr double scale = 0.65;
++struct Box { double x, y, width, height; };
++struct Placement { double x, y; Box bounds; };
++// Font bearings stay in the calculation; neither glyph is centered by its advance.
++inline Placement place(Box ornament, Box accidental, bool above, double gap)
++{
++    double x = ornament.x + ornament.width * 0.5 - accidental.x - accidental.width * 0.5;
++    double y = above ? ornament.y - gap - accidental.y - accidental.height
++                     : ornament.y + ornament.height + gap - accidental.y;
++    return { x, y, { accidental.x + x, accidental.y + y, accidental.width, accidental.height } };
++}
++}}}
++#endif
+--- a/src/importexport/musicxml/internal/musicxml/exportxml.cpp
++++ b/src/importexport/musicxml/internal/musicxml/exportxml.cpp
+@@ -2999,6 +2999,18 @@
+ //   chordAttributes
+ //---------------------------------------------------------
+ 
++static const char* ornamentAuxiliaryXml(SymId symbol)
++{
++    switch (symbol) {
++    case SymId::accidentalFlat: return "flat";
++    case SymId::accidentalNatural: return "natural";
++    case SymId::accidentalSharp: return "sharp";
++    case SymId::accidentalDoubleFlat: return "flat-flat";
++    case SymId::accidentalDoubleSharp: return "double-sharp";
++    default: return nullptr;
++    }
++}
++
+ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
+                                      TrillHash& trillStart, TrillHash& trillStop)
+ {
+@@ -3064,6 +3076,11 @@
+             notations.tag(_xml, a);
+             ornaments.tag(_xml);
+             _xml.tagRaw(mxmlOrnam);
++            for (bool above : { true, false }) {
++                const char* value = ornamentAuxiliaryXml(a->ornamentAuxiliary(above));
++                if (value)
++                    _xml.tag("accidental-mark", { { "placement", above ? "above" : "below" } }, value);
++            }
+         }
+     }
+ 
+--- a/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
++++ b/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
+@@ -1011,6 +1011,23 @@
+ //   addArticulationToChord
+ //---------------------------------------------------------
+ 
++static SymId ornamentAuxiliarySymbol(const QString& value)
++{
++    if (value == "flat") return SymId::accidentalFlat;
++    if (value == "natural") return SymId::accidentalNatural;
++    if (value == "sharp") return SymId::accidentalSharp;
++    if (value == "flat-flat") return SymId::accidentalDoubleFlat;
++    if (value == "double-sharp" || value == "sharp-sharp") return SymId::accidentalDoubleSharp;
++    return SymId::noSym;
++}
++
++static void applyOrnamentAuxiliaries(const Notation& notation, Articulation* articulation)
++{
++    if (!articulation->isOrnament()) return;
++    articulation->setOrnamentAuxiliary(ornamentAuxiliarySymbol(notation.attribute("ornament-aux-above")), true);
++    articulation->setOrnamentAuxiliary(ornamentAuxiliarySymbol(notation.attribute("ornament-aux-below")), false);
++}
++
+ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
+ {
+     const SymId articSym = notation.symId();
+@@ -1018,6 +1035,7 @@
+     const QString place = notation.attribute("placement");
+     Articulation* na = Factory::createArticulation(cr);
+     na->setSymId(articSym);
++    applyOrnamentAuxiliaries(notation, na);
+ 
+     if (!dir.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
+         na->setUp(dir.isEmpty() || dir == "up");
+@@ -1110,6 +1128,7 @@
+     if (articSym != SymId::noSym) {
+         Articulation* na = Factory::createArticulation(cr);
+         na->setSymId(articSym);
++        applyOrnamentAuxiliaries(notation, na);
+         cr->add(na);
+     } else {
+         LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
+@@ -5816,6 +5835,9 @@
+ void MusicXMLParserNotations::ornaments()
+ {
+     bool trillMark = false;
++    int lastOrnament = -1;
++    bool lastWasTrill = false;
++    Notation trillNotation { "trill-mark", "ornaments", SymId::ornamentTrill };
+     // <trill-mark placement="above"/>
+     while (_e.readNextStartElement()) {
+         SymId id { SymId::noSym };
+@@ -5823,11 +5845,18 @@
+             Notation notation = Notation::notationWithAttributes(_e.name().toString(),
+                                                                  _e.attributes(), "articulations", id);
+             _notations.push_back(notation);
++            lastOrnament = int(_notations.size()) - 1;
++            lastWasTrill = false;
+             _e.skipCurrentElement();  // skip but don't log
+         } else if (_e.name() == "trill-mark") {
+             trillMark = true;
++            trillNotation = Notation::notationWithAttributes("trill-mark", _e.attributes(), "ornaments", SymId::ornamentTrill);
++            lastWasTrill = true;
++            lastOrnament = -1;
+             _e.skipCurrentElement();  // skip but don't log
+         } else if (_e.name() == "wavy-line") {
++            lastOrnament = -1;
++            lastWasTrill = false;
+             auto wavyLineTypeWasStart = (_wavyLineType == "start");
+             _wavyLineType = _e.attributes().value("type").toString();
+             _wavyLineNo   = _e.attributes().value("number").toString().toInt();
+@@ -5846,12 +5875,35 @@
+             }
+             _e.skipCurrentElement();  // skip but don't log
+         } else if (_e.name() == "tremolo") {
++            lastOrnament = -1;
++            lastWasTrill = false;
+             _tremoloType = _e.attributes().value("type").toString();
+             _tremoloNr = _e.readElementText().toInt();
+         } else if (_e.name() == "inverted-mordent"
+                    || _e.name() == "mordent") {
+             mordentNormalOrInverted();
+-        } else {
++            lastOrnament = int(_notations.size()) - 1;
++            lastWasTrill = false;
++        } else if (_e.name() == "accidental-mark") {
++            QString placement = _e.attributes().value("placement").toString();
++            QString text = _e.readElementText();
++            Notation* owner = lastWasTrill ? &trillNotation
++                : lastOrnament >= 0 ? &_notations[lastOrnament] : nullptr;
++            if (!owner || (!placement.isEmpty() && placement != "above" && placement != "below")
++                || ornamentAuxiliarySymbol(text) == SymId::noSym) {
++                _logger->logError("Unowned or unsupported ornament accidental", &_e);
++                continue;
++            }
++            QString key = placement == "below" ? "ornament-aux-below" : "ornament-aux-above";
++            QString prior = owner->attribute(key);
++            if (prior.isEmpty() || prior == text) owner->setAttribute(key, text);
++            else {
++                owner->setAttribute(key, "conflict");
++                _logger->logError("Conflicting ornament accidental", &_e);
++            }
++        } else {
++            lastOrnament = -1;
++            lastWasTrill = false;
+             skipLogCurrElem();
+         }
+     }
+@@ -5859,8 +5911,7 @@
+     // note that mscore wavy line already implicitly includes a trillsym
+     // so don't add an additional one
+     if (trillMark && _wavyLineType != "start" && _wavyLineType != "startstop") {
+-        Notation ornament { "trill-mark", "ornaments", SymId::ornamentTrill };
+-        _notations.push_back(ornament);
++        _notations.push_back(trillNotation);
+     }
+ }
+ 
+--- a/src/importexport/musicxml/internal/musicxml/importmxmlpass2.h
++++ b/src/importexport/musicxml/internal/musicxml/importmxmlpass2.h
+@@ -156,6 +156,7 @@
+              const SymId& symId = SymId::noSym) { _name = name; _parent = parent; _symId = symId; }
+     void addAttribute(const QStringRef name, const QStringRef value);
+     QString attribute(const QString& name) const;
++    void setAttribute(const QString& name, const QString& value) { _attributes[name] = value; }
+     QString name() const { return _name; }
+     QString parent() const { return _parent; }
+     void setSymId(const SymId& symId) { _symId = symId; }

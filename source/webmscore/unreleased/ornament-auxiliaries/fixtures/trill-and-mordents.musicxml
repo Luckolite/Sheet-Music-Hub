@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<score-partwise version="4.0">
+  <!-- Original logical score, dedicated to the public domain under CC0-1.0. -->
+  <part-list>
+    <score-part id="P1">
+      <part-name>Original auxiliary control</part-name>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <type>quarter</type>
+        <notations>
+          <ornaments>
+            <trill-mark />
+            <accidental-mark placement="above">natural</accidental-mark>
+          </ornaments>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <type>quarter</type>
+        <notations>
+          <ornaments>
+            <mordent />
+            <accidental-mark placement="below">flat</accidental-mark>
+          </ornaments>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <type>quarter</type>
+        <notations>
+          <ornaments>
+            <inverted-mordent />
+            <accidental-mark placement="above">sharp</accidental-mark>
+          </ornaments>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>F</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <type>quarter</type>
+        <notations>
+          <ornaments>
+            <turn />
+            <accidental-mark placement="below">double-sharp</accidental-mark>
+          </ornaments>
+        </notations>
+      </note>
+    </measure>
+  </part>
+</score-partwise>

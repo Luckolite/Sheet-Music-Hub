@@ -1,0 +1,58 @@
+{
+  "status": "UNRELEASED_SOURCE_ONLY_NOT_BUILT_OR_ADOPTED",
+  "license": "GPL-3.0-only",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "parserSource": "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp",
+  "requires": [
+    "../../corresponding-source.patch",
+    "../reverse-slur-completion/reverse-slur-completion.patch",
+    "../articulation-ornament-import/importer.patch"
+  ],
+  "beforeFiles": {
+    "src/engraving/libmscore/articulation.cpp": "0583b1ef5f1ea7ce871098376bb375ced056672695bfe946f3ba68f4ed3e74aa",
+    "src/engraving/libmscore/articulation.h": "bda3ac83da3808b55cb14fecaf27f9ecc4d1b53c5bf21f06aa572d1987d276e9",
+    "src/importexport/musicxml/internal/musicxml/exportxml.cpp": "ef65e0b579363e3eba48c728f57cf13bd9e9498ab0f899a115a831ebcd70c891",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "67c2c5bb9d61d3f8af3b08a58182c6547d80e03bae9df42ae10fa7f6d3e087f2",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.h": "dcff63ef5e7b0c4e389b459ab26b7a01d7a09a24456170a3538adfa29502dace"
+  },
+  "afterFiles": {
+    "src/engraving/libmscore/articulation.cpp": "acf7c3d9fe99c0a106d434d8e0a353e07181f04874e85e0b454aaad58833f693",
+    "src/engraving/libmscore/articulation.h": "2b113487c666446b101b05d0d3e7ae78c4ee4508edf96545f7962c3a9fd4076a",
+    "src/engraving/types/ornamentauxlayout.h": "c8452f6954f12c00e10b3c20a9b50b2f3cbb0df522d6f6651ebafc8fcbe43c7d",
+    "src/importexport/musicxml/internal/musicxml/exportxml.cpp": "9124641aa212fc3ddb4a9b2eab82f0d402d47fac3c173000455e992529ea551e",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "5a0eba4252c9cc12e6c7cd0f8f642c72fc0fb5ca6fe29dfb5fc5b9c9c8293471",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.h": "72099a47b2468ec4a80dc88a39420d69c7ee221265a16c9c242f0080143cc4b0"
+  },
+  "beforeParserFunctions": {
+    "void MusicXMLParserNotations::mordentNormalOrInverted()": "55a0f35b92849f2f28ae9fc9fe26b353fafc45850469fa2d527e7306212c6471",
+    "void MusicXMLParserNotations::ornaments()": "ee3c0486d3c03df3d51bcd53398663bca4ea86e9b22dbe932c62a75888d88adc"
+  },
+  "stateControls": 21,
+  "baselineParserFailures": 9,
+  "layoutControls": 16,
+  "actualQtTranslationUnitsSyntaxPassed": 3,
+  "baselineUsesOldParserWithNewInspectionSink": true,
+  "fullRendererRuntimeProven": false,
+  "rendererBinaryBuilt": false,
+  "productionAssetsChanged": false,
+  "appExportCommit": "726e58c2c48cf67a0ea2fe57bb2d26a1feb71fc5",
+  "remaining": [
+    "wavy trill-spanner auxiliaries",
+    "delayed-turn horizontal placement",
+    "renderer ornament auxiliary pitch realization",
+    "full renderer/native/browser/packaged verification",
+    "render-cache invalidation on final bundle adoption"
+  ],
+  "files": {
+    ".gitattributes": "9628b57eab31736e622097d94f553dc963c44ad2adf2f6fd8a38663dd858e90a",
+    "check_state.py": "3344fb772f38dfad48305554acea9b1711a650d252b750db1decb755163752e3",
+    "check_xml.py": "1ac4290bd2796467526afbc674f6edf4c078d32aa39ad8ddaecbe7006417f690",
+    "fixtures/separate-ornaments.musicxml": "b37be1c236402f1f420e2ac33bd4dd05f05ec7a35232fc167fa1ed72c72b5e88",
+    "fixtures/trill-and-mordents.musicxml": "97af2d2b165349849d1beba041fcb119bcf6c5d338ad1c0edac82ec5472d30c6",
+    "fixtures/two-sided-turn.musicxml": "32ed444ff59f46f149c43cc89294e17938cb1bd0bbed89826409754ffc95069b",
+    "layout-controls.cpp": "adedd3f9d99b6d0461813934436c42fa64f373f43a8408186742429ebbb78ed2",
+    "ornament-auxiliaries.patch": "baa5f5b352f562ac06217c20f8598f3632f213f1dbe2f9868695179130730a26",
+    "README.md": "9be4e3a68ecadefd594f3291b52b93526e67b6944c51a7e5ebf35ed7ae0fbe47",
+    "state-harness.cpp": "965abd66daa08ab6a9b3117a4ddaa7b8fc1adb04d4657dc217ebfe490f5ef593"
+  }
+}

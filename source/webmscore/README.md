@@ -19,6 +19,10 @@ The separate [articulation/ornament importer draft](unreleased/articulation-orna
 is queued for a later renderer build. It is not part of the existing adopted
 bundle or its corresponding-source manifests.
 
+The subsequent [ornament auxiliary accidental draft](unreleased/ornament-auxiliaries/README.md)
+adds retained plain-ornament fields and collision bounds. It also remains separate
+from the adopted bundle pending the final renderer build and runtime checks.
+
 Clone https://github.com/LibreScore/webmscore and check out commit
 `78db5eb5437ccf1d17e0c4820374ee12f8862ce9`. Initialize its pinned submodules
 with `git submodule update --init --recursive`. From that checkout, apply this
