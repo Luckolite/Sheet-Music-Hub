@@ -23,6 +23,10 @@ The subsequent [ornament auxiliary accidental draft](unreleased/ornament-auxilia
 adds retained plain-ornament fields and collision bounds. It also remains separate
 from the adopted bundle pending the final renderer build and runtime checks.
 
+The [plain-ornament auxiliary playback draft](unreleased/ornament-auxiliary-playback/README.md)
+then connects those retained signs to legacy MIDI ornament pitches. It has source
+controls and syntax evidence; rebuilt renderer/runtime verification is pending.
+
 Clone https://github.com/LibreScore/webmscore and check out commit
 `78db5eb5437ccf1d17e0c4820374ee12f8862ce9`. Initialize its pinned submodules
 with `git submodule update --init --recursive`. From that checkout, apply this

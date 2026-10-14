@@ -1,0 +1,81 @@
+--- a/src/engraving/libmscore/rendermidi.cpp
++++ b/src/engraving/libmscore/rendermidi.cpp
+@@ -1466,10 +1466,36 @@
+ // sustainp, true means the last note of the body is sustained to fill remaining time slice
+ //---------------------------------------------------------
+ 
++static bool ornamentAuxiliaryAlteration(SymId symbol, int& alteration)
++{
++    switch (symbol) {
++    case SymId::accidentalDoubleFlat: alteration = -2; return true;
++    case SymId::accidentalFlat: alteration = -1; return true;
++    case SymId::accidentalNatural: alteration = 0; return true;
++    case SymId::accidentalSharp: alteration = 1; return true;
++    case SymId::accidentalDoubleSharp: alteration = 2; return true;
++    default: return false;
++    }
++}
++
++static int ornamentPitchSteps(const Note* note, int steps, SymId upper, SymId lower)
++{
++    // Only the explicit adjacent auxiliary is changed; principal/key/context stay local.
++    SymId symbol = steps == 1 ? upper : steps == -1 ? lower : SymId::noSym;
++    int alteration = 0;
++    if (!ornamentAuxiliaryAlteration(symbol, alteration))
++        return chromaticPitchSteps(note, note, steps);
++    const Chord* chord = note->chord();
++    const Staff* staff = note->score()->staff(chord->vStaffIdx());
++    int natural = line2pitch(note->line() - steps, staff->clef(chord->tick()), Key::C);
++    return natural + alteration - note->epitch();
++}
++
+ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, int requestedTicksPerNote,
+                             const std::vector<int>& prefix, const std::vector<int>& body,
+                             bool repeatp, bool sustainp, const std::vector<int>& suffix,
+-                            int fastestFreq=64, int slowestFreq=8 // 64 Hz and 8 Hz
++                            int fastestFreq=64, int slowestFreq=8, // 64 Hz and 8 Hz
++                            SymId upperAuxiliary=SymId::noSym, SymId lowerAuxiliary=SymId::noSym
+                             )
+ {
+     events->clear();
+@@ -1559,8 +1585,8 @@
+     //   append a NoteEvent either by calculating an articulationExcursion or by
+     //   the given chromatic relative pitch.
+     //   RETURNS the new ontime value.  The caller is expected to assign this value.
+-    auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration) {
+-        events->push_back(NoteEvent(chromatic ? pitch : chromaticPitchSteps(note, note, pitch),
++    auto makeEvent = [note, chord, chromatic, events, upperAuxiliary, lowerAuxiliary](int pitch, int ontime, int duration) {
++        events->push_back(NoteEvent(chromatic ? pitch : ornamentPitchSteps(note, pitch, upperAuxiliary, lowerAuxiliary),
+                                     ontime / chord->actualTicks().ticks(),
+                                     duration / chord->actualTicks().ticks()));
+         return ontime + duration;
+@@ -1730,7 +1756,8 @@
+ //   renderNoteArticulation
+ //---------------------------------------------------------
+ 
+-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, OrnamentStyle ornamentStyle)
++bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, OrnamentStyle ornamentStyle,
++                            SymId upperAuxiliary=SymId::noSym, SymId lowerAuxiliary=SymId::noSym)
+ {
+     if (!note->staff()->isPitchedStaff(note->tick())) { // not enough info in tab staff
+         return false;
+@@ -1741,7 +1768,8 @@
+         if (oe.atype == articulationType && (0 == oe.ostyles.size()
+                                              || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
+             return renderNoteArticulation(events, note, chromatic, oe.duration,
+-                                          oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix);
++                                          oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix,
++                                          64, 8, upperAuxiliary, lowerAuxiliary);
+         }
+     }
+     return false;
+@@ -1872,7 +1900,8 @@
+                 if (!a->playArticulation()) {
+                     continue;
+                 }
+-                if (!renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle())) {
++                if (!renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle(),
++                                            a->ornamentAuxiliary(true), a->ornamentAuxiliary(false))) {
+                     instr->updateGateTime(&gateTime, channel, a->articulationName());
+                 }
+             }

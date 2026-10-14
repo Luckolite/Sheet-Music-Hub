@@ -1,0 +1,29 @@
+{
+  "status": "UNRELEASED_SOURCE_ONLY_NOT_BUILT_OR_ADOPTED",
+  "license": "GPL-3.0-only",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "requires": [
+    "../../corresponding-source.patch",
+    "../reverse-slur-completion/reverse-slur-completion.patch",
+    "../articulation-ornament-import/importer.patch",
+    "../ornament-auxiliaries/ornament-auxiliaries.patch"
+  ],
+  "source": "src/engraving/libmscore/rendermidi.cpp",
+  "beforeSha256": "e339f029127a56e331926fd3aa34b8e5078e5e4e8accb10775ee45257acba745",
+  "afterSha256": "5e0eb68c1c27b88f66f85448034cac981c40a53f4a2d0b1aa669c98e1ba97526",
+  "stateControls": 25,
+  "baselineFailures": 14,
+  "actualQtTranslationUnitSyntaxPassed": true,
+  "frameworkObjectsSubstituted": true,
+  "rendererBinaryBuilt": false,
+  "fullRendererRuntimeProven": false,
+  "productionAssetsChanged": false,
+  "standaloneSpellingCommit": "ba61ff92a8d620f5a12d33c1fe0a8c38242bf42d",
+  "files": {
+    ".gitattributes": "c6e498a4062e317a2c97b82484cda8791e82be5d8c5779e8cf3d09f9a4b3c249",
+    "auxiliary-playback.patch": "2bd09355eb54a3cdf267fd170803a277fec74aa4ef395116a45951ab5481f005",
+    "check_pitch.py": "0590e2380350ae8dbfa60cb730d15dbbdb53191f04aa3485116414d1cd007665",
+    "pitch-harness.cpp": "ab95e8219eb81ec6e695f7ae49d0dd50a23ec6bb05220cf6fc8e5b9ff59e5686",
+    "README.md": "a721c5f58187f642e7f31bfcd351f1adba2cbdf62a1125a2776621a61311eee5"
+  }
+}
