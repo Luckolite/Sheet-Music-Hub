@@ -31,9 +31,21 @@ dedicated to the public domain under CC0-1.0. The state harness and checker are
 Copyright 2026 Luckolite, GPL-3.0-only; the patch preserves upstream GPL licensing.
 
 The existing cached renderer imports only two of the three reversed-case arcs.
-No modified renderer binary has been built or qualified for this draft. The
-parent corresponding-source patch, qualified bundle manifest, existing notices,
-published assets and releases remain unchanged. New full renderer/reload/export,
-audio timing and packaged Android checks are required before asset adoption.
+A private incremental renderer candidate now retains all eight source-owned arcs
+and sixteen written notes across the three original controls, including the
+reversed cross-staff span. Native save/reload preserves their exact endpoints.
+Parsed MIDI notes, clocks, tempo maps and controllers match the prior engine.
+Six import comparisons and six native reload flows completed without console
+warnings; the writer's invalid overlapping-ID baseline remains intentionally
+unrepaired by this importer patch.
+
+This is bounded qualification of the bare headless renderer, not the complete
+generated-style pipeline, packaged Android runtime or desktop deployment. The
+reverse-grace and dashed/dotted controls still have state-level evidence only.
+The private candidate's four bundle hashes are recorded separately in this
+draft manifest. No candidate binaries are published or adopted into the app.
+The parent corresponding-source patch, existing qualified bundle manifest,
+notices, published assets and releases remain unchanged. Broader rendering,
+style/voice ownership and packaged checks are required before asset adoption.
 
 Specification: https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/number-level/

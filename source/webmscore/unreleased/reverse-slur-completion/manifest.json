@@ -1,5 +1,5 @@
 {
-  "status": "UNRELEASED_SOURCE_DRAFT_NOT_BUILT_OR_DEPLOYED",
+  "status": "UNRELEASED_SOURCE_PRIVATE_CANDIDATE_QUALIFIED_NOT_DEPLOYED",
   "license": "GPL-3.0-only",
   "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
   "sourcePath": "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp",
@@ -14,13 +14,48 @@
     "fixtures/disjoint-musical-cross-staff.musicxml": "700e1afe34e841ec7eceff0a2933196163fa18a5236a7e7364f252c1caef7de4",
     "fixtures/forward-cross-staff.musicxml": "716581ff2bb4da352830e7ac3131df86781ef808ba095019c5694cc5e49c46c7",
     "fixtures/reverse-cross-staff.musicxml": "9ef8b3cceca40a43607c20fc624696e559d83aab7e54892393331c7bd4ae913b",
-    "README.md": "47325331577d2551fbb55864cd5d4ed8fdabeddce5cd628488261e59876f952a",
+    "README.md": "cfd3a55d63191bbcb5549ccbc05dba07591c0f62325d0038e7c594c17573252c",
     ".gitattributes": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
   },
   "stateControls": 10,
   "baselineFailedControls": 8,
   "actualImporterSyntaxPassed": true,
-  "rendererBinaryBuilt": false,
-  "runtimeFixProven": false,
-  "productionAssetsChanged": false
+  "rendererBinaryBuilt": true,
+  "runtimeFixProven": true,
+  "productionAssetsChanged": false,
+  "runtimeQualificationScope": "Bare private headless engine; three original source controls and native reload, not full app or packaged runtime",
+  "fullProductionHtmlPipeline": false,
+  "packagedAndroidQualified": false,
+  "privateCandidateBundle": [
+    {
+      "name": "webmscore.js",
+      "sha256": "490f0d6c73b738c24ffb6a1b8c3b6ab6662e68318664799adb7d047290d5ed88",
+      "bytes": 266198
+    },
+    {
+      "name": "webmscore.lib.wasm",
+      "sha256": "d53612aa65ec6dd516a2283c4303153a91c2c58ad8fdb47149daba778bfbab7f",
+      "bytes": 9260797
+    },
+    {
+      "name": "webmscore.lib.mem.wasm",
+      "sha256": "e9ecabf08a806a2829b830bb33dacdba0b87c761a37e8a81a35c7e9f373e5bfd",
+      "bytes": 4158579
+    },
+    {
+      "name": "webmscore.lib.data",
+      "sha256": "5fe70ccfeec2791a9bb71c1a3a72f4e28c06380ff4a775b47d056248201bd171",
+      "bytes": 4113025
+    }
+  ],
+  "boundedQualification": {
+    "sourceNotes": 16,
+    "sourceArcs": 8,
+    "sourceCases": 3,
+    "importComparisons": 6,
+    "nativeReloadFlows": 6,
+    "exactSourceEndpoints": true,
+    "parsedMidiExact": true
+  },
+  "reverseGraceAndLineTypesRuntimeQualified": false
 }
