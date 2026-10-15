@@ -1,8 +1,8 @@
-Music Sheets Hub 1.6.155
+Music Sheets Hub 1.6.156
 
-- Updated sheet processing and playback for Music Sheets 1.18.493.
-- Fixes for ties, repeats, ornaments and notation.
-- Sync reliability improvements.
+- Better sheet credits and notation.
+- Fixes a sheet-processing crash.
+- Updated for Music Sheets 1.18.494.
 
 55 Hub tests passed. Packaged and installed sheet processing verified.
 
