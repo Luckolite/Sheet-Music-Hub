@@ -1,4 +1,4 @@
-Music Sheets Hub 1.6.155
+Music Sheets Hub 1.6.159
 
 Windows 64-bit. Extract the whole ZIP and open Music Sheets Sync Hub.exe.
 Keep MusicSheetsNativePage beside the EXE. Exit the previous Hub before replacing both together.
@@ -7,4 +7,4 @@ In Music Sheets, open Syncing > Library Sync to pair your devices and Hub.
 Google linking needs your separately configured desktop OAuth client.
 
 Third-party notices are under Notices and within the worker runtime.
-Interpreter source: https://github.com/Luckolite/Music-Sheets-Interpreter/tree/6619269f4fc3d30bbc71268a5708142aa82d4908
+Interpreter source: https://github.com/Luckolite/Sheet-Music-Interpreter/tree/d49783e606dabaf73feacbf00149b3aadbf9aad0

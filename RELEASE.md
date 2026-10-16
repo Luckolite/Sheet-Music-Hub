@@ -1,9 +1,8 @@
-Music Sheets Hub 1.6.156
+Music Sheets Hub 1.6.159
 
-- Better sheet credits and notation.
-- Fixes a sheet-processing crash.
-- Updated for Music Sheets 1.18.494.
+- Improved recognition of notes, rests, ties, triplets and repeat endings.
+- Fixed pickup, tempo and meter handling.
+- Improved dynamics, fermatas and paired tremolo playback.
+- Includes the matching desktop sheet processor.
 
-55 Hub tests passed. Packaged and installed sheet processing verified.
-
-Extract the whole ZIP. Replace the Hub and MusicSheetsNativePage folder together; keep your library and settings.
+To update, exit the old Hub and replace the EXE and `MusicSheetsNativePage` folder with the contents of the ZIP. Keep your library and settings.
