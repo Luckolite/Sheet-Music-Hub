@@ -5,4 +5,4 @@ Music Sheets Hub 1.6.159
 - Improved dynamics, fermatas and paired tremolo playback.
 - Includes the matching desktop sheet processor.
 
-To update, exit the old Hub and replace the EXE and `MusicSheetsNativePage` folder with the contents of the ZIP. Keep your library and settings.
+Download **both ZIPs** and extract them into the **same folder**. To update, exit the old Hub and replace the EXE and `MusicSheetsNativePage` folder together. Keep your library and settings.

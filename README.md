@@ -29,11 +29,11 @@ Downloads:
 
 [Download for Windows](https://github.com/Luckolite/Sheet-Music-Hub/releases/latest) · Current version: **1.6.159**
 
-The ZIP includes the Hub and its matching sheet processor. Extract the whole ZIP and keep the `MusicSheetsNativePage` folder beside the EXE.
+Download both ZIPs and extract them into the same folder. Together they include the Hub and its matching sheet processor; keep `MusicSheetsNativePage` beside the EXE.
 
 Getting started:
 1. Use a 64-bit Windows PC with Music Sheets on your Android device.
-2. Extract the download and open **Music Sheets Sync Hub.exe**.
+2. Extract both ZIPs into the same folder and open **Music Sheets Sync Hub.exe**.
 3. In Music Sheets, open **Syncing → Library Sync** and enable syncing.
 4. Choose **Link Google account** on your devices and in the Hub, using the same account. Or choose **Pair with a friend using a code** and enter the same generated code.
 5. Choose **Save & start syncing**. Allow private-network access if Windows asks.

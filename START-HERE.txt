@@ -1,6 +1,6 @@
 Music Sheets Hub 1.6.159
 
-Windows 64-bit. Extract the whole ZIP and open Music Sheets Sync Hub.exe.
+Windows 64-bit. Extract BOTH release ZIPs into the same folder, then open Music Sheets Sync Hub.exe.
 Keep MusicSheetsNativePage beside the EXE. Exit the previous Hub before replacing both together.
 Keep your existing library and settings. Closing the window keeps syncing in the tray.
 In Music Sheets, open Syncing > Library Sync to pair your devices and Hub.
