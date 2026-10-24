@@ -1,0 +1,15 @@
+--- a/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
++++ b/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
+@@ -6290,6 +6290,12 @@
+             if (chordLineType == "scoop") {
+                 chordline->setChordLineType(ChordLineType::SCOOP);
+             }
++            // Isolated approaches carry their literal source shape in MusicXML.
++            // Preserve the existing curved/default and departure policies.
++            if ((chordLineType == "scoop" || chordLineType == "plop")
++                && notation.attribute("line-shape") == "straight") {
++                chordline->setStraight(true);
++            }
+             note->chord()->add(chordline);
+         } else {
+             logger->logError(QString("no note for %1").arg(chordLineType), xmlreader);

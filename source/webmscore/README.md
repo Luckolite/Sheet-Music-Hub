@@ -19,6 +19,18 @@ Library publication remain unverified. The prior
 parent manifest, tags and published assets are preserved unchanged. This
 documentation update creates no Hub release.
 
+## Printed chord-line shape runtime adoption
+
+The [2026-10-24 adoption record](adoptions/printed-chordline-shapes-20261024.json)
+qualifies the rebuilt straight scoop/plop importer. Apply the
+[printed chord-line supplement](unreleased/printed-chordline-shapes/README.md)
+after the five packets below. It includes the exact patched importer, minimal
+incremental patch, GPL license and reproduction manifest. Six procedural native
+import/preparation/edit/save/reopen/export cases and two browser Worker cases
+passed; rendered shapes, articulation placement and paired parentheses were
+visually reviewed. Android runtime/publication and the separate Hub/worker pair
+have their own verification records. This source update creates no Hub release.
+
 ## Reconstruct the complete source
 
 For the latest adopted bundle, apply the parent patch first, then these packets

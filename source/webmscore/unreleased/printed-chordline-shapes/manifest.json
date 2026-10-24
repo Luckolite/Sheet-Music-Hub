@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "status": "BUILT_AND_RUNTIME_QUALIFIED",
+  "license": "GPL-3.0-only",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "requires": [
+    "../../corresponding-source.patch",
+    "../reverse-slur-completion/reverse-slur-completion.patch",
+    "../articulation-ornament-import/importer.patch",
+    "../ornament-auxiliaries/ornament-auxiliaries.patch",
+    "../ornament-auxiliary-playback/auxiliary-playback.patch",
+    "../delayed-turn/delayed-turn.patch"
+  ],
+  "beforeFiles": {
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "6bb5f2c40e6145866a3e148d24945bb724a7562ef7b4f6d630ac1a4eb59183c4"
+  },
+  "afterFiles": {
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "cd88276f5d8ce512e31604f7caa331445b5926e0fd49f584c2e049684c96ad63"
+  },
+  "files": {
+    "README.md": "0b261299851b00648ddb45622c7601f2c3d041d629c6a1b5932009107565d625",
+    "importer.patch": "23fd24499e8c7944f3b6e87bebe2bdb0b1bcb239773d9eadb86ac0032d6553b8",
+    "source/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "cd88276f5d8ce512e31604f7caa331445b5926e0fd49f584c2e049684c96ad63",
+    "COPYING": "258edd17156790f60645806a289d786ddcdf2ad1bde1dd85eaaa284ad2eb8f2c"
+  },
+  "qualification": {
+    "nativeOriginals": 6,
+    "browserWorkerOriginals": 2,
+    "nativePreparationEditSaveReopenExport": true,
+    "sourceStraightScoopPlopVerified": true,
+    "articulationAndParenthesisOriginalsVerified": true,
+    "pngVisuallyReviewed": true,
+    "androidRuntimeVerified": false
+  }
+}

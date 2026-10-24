@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "component": "modified webmscore1.2.1",
+  "license": "GPL-3.0-only",
+  "upstreamCommit": "78db5eb5437ccf1d17e0c4820374ee12f8862ce9",
+  "parentCorrespondingSourceCommit": "c08744cf4c0307c77ca288a19105029362ebcef0",
+  "orderedSupplements": [
+    "reverse-slur-completion",
+    "articulation-ornament-import",
+    "ornament-auxiliaries",
+    "ornament-auxiliary-playback",
+    "delayed-turn",
+    "printed-chordline-shapes"
+  ],
+  "sourceUtf8LfSha256": {
+    "build/cmake/GetPlatformInfo.cmake": "e98c18941543aa4568792fe4be5ab256e6311a45127b5172574caa6ce239d040",
+    "src/engraving/libmscore/chord.cpp": "9e37cede0e4312eeae8937bbb00bd84b5b7bc62ef988228df64cd511f17f5370",
+    "src/engraving/libmscore/chord.h": "f09d6807ba2d85b9be0f139d851358a38fcf293a06ce45def2725eb38e0e271b",
+    "src/engraving/libmscore/figuredbass.cpp": "28c306dbd50295a54c8f4038f1592dbc5d9726725125d5a35371fe363c43a4eb",
+    "src/engraving/libmscore/hairpin.cpp": "dc15183668a3e4121fe39d4170031856ea7263125b508fca4e0ba4e51a264d77",
+    "src/engraving/libmscore/hairpin.h": "c323ea7a756bb0d7ee70d0b87ed470cf029b43df9328331d50f91f8448ab2a91",
+    "src/engraving/libmscore/line.cpp": "e209be80d07883ef004a8b313c1d3691329df95101d62285e42d09c7d3d54c9e",
+    "src/engraving/libmscore/noteevent.cpp": "3acc869d477429245aa5c813fe64b6de01803854d6e84017f8cc1e23255fd45e",
+    "src/engraving/libmscore/noteevent.h": "8ef03085ec0ebd087fcbb8bbe84191e6c72588a10b8ff096790d967a2afa311a",
+    "src/engraving/libmscore/rendermidi.cpp": "b6d84916233c3aa5c7bf2c5e89841e7b9fe06b7a556c7032fb3066e77fd16536",
+    "src/engraving/libmscore/scorefile.cpp": "a9e6f6bc09961973077c1a60c61e89d454c0db417921051f7f5878b7cae0959a",
+    "src/engraving/libmscore/spanner.cpp": "18cee837461681dc26ab4aa696050c5e3c0f88889c5ee3cd164a14344fa56a4e",
+    "src/engraving/types/musicxmltimegrid.h": "587ee0c8b21573c1e786df6dd14e1d233129783b14ab3b44f82c39d3417389c4",
+    "src/framework/audio/internal/encoders/wavencoder.cpp": "1807be8ab1dc4258ac691c3d10e64dcd1ab15fa7b1ccb2cc796560bfa88dc93f",
+    "src/framework/audio/internal/synthesizers/fluidsynth/fluidsequencer.cpp": "4d7f862cdb4ca408d600de60406c1d17b75987efb0c50493092a73f38ed2c666",
+    "src/importexport/musicxml/internal/musicxml/exportxml.cpp": "181aa1f8928c86f083f7de6accfc50689e0223bcc6a5923361484c0b413daa2f",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "cd88276f5d8ce512e31604f7caa331445b5926e0fd49f584c2e049684c96ad63",
+    "web/CMakeLists.txt": "21dcf0d0a20e70b438fbe812e14909322cd3fb0f5c1dd1e22f63de63fd1ef285",
+    "src/engraving/libmscore/articulation.cpp": "745776215e95258690fd3a263b438a55e48742dad9c9be8a962c254b5f49e5bc",
+    "src/engraving/libmscore/articulation.h": "6703b2a6b11ef0036f5943abf7dbf2df97f26474f42e061dda7f90c908d68c07",
+    "src/engraving/types/ornamentauxlayout.h": "c8452f6954f12c00e10b3c20a9b50b2f3cbb0df522d6f6651ebafc8fcbe43c7d",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.h": "72099a47b2468ec4a80dc88a39420d69c7ee221265a16c9c242f0080143cc4b0"
+  },
+  "bundle": [
+    {
+      "name": "webmscore.js",
+      "bytes": 266198,
+      "sha256": "59cf5922be4018409effef84c518155ab73bcac1d2e6d7b3822a6d3ccfd647fb"
+    },
+    {
+      "name": "webmscore.lib.wasm",
+      "bytes": 9265128,
+      "sha256": "f6c74e5e804fd3754cdb488924e3bb5061f9e3773100d8a8a845bbe418fcd581"
+    },
+    {
+      "name": "webmscore.lib.mem.wasm",
+      "bytes": 4158947,
+      "sha256": "9c0928611ee827151f3b554bffa27a6a7e0a125f05b26ce661b95054b12c5f0b"
+    },
+    {
+      "name": "webmscore.lib.data",
+      "bytes": 4113025,
+      "sha256": "5fe70ccfeec2791a9bb71c1a3a72f4e28c06380ff4a775b47d056248201bd171"
+    }
+  ],
+  "qualification": {
+    "nativeOriginals": 6,
+    "browserWorkerOriginals": 2,
+    "nativePreparationEditSaveReopenExport": true,
+    "sourceStraightScoopPlopVerified": true,
+    "articulationAndParenthesisOriginalsVerified": true,
+    "pngVisuallyReviewed": true,
+    "androidRuntimeVerified": false,
+    "apkPublished": false,
+    "desktopDeploymentVerified": false
+  },
+  "build": {
+    "nativeTarget": "webmscore.lib.js",
+    "emscripten": "2.0.6",
+    "qt": "5.15.2",
+    "jsBundleStage": "Rollup build:js-only without clean",
+    "nativeCppRawSha256": "857669495786119d25120e8c0ba31c264eb87cd1744928598078e682791771b6",
+    "getPlatformInfoUniversalLfSha256": "e98c18941543aa4568792fe4be5ab256e6311a45127b5172574caa6ce239d040"
+  },
+  "supplementManifestSha256": "7e79777f336cc9072c691f1dc7fc7b75e0b64004fb1e0c14b2f9b16161a5cfdb",
+  "scope": "Procedural originals only; no commercial score, private library, device or signing data. No Hub tag or GitHub release."
+}
