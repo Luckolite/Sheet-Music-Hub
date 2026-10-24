@@ -4,6 +4,13 @@ The Hub processes queued pages on your PC and syncs the results back to Music Sh
 The download includes its matching processor; keep `MusicSheetsNativePage` beside the EXE.
 From the app's Hub panel, pause processing, choose up to five workers, or retry pages.
 
+The internal 1.6.163 paired build prepared with Music Sheets 1.18.517 uses Guide 299,
+recognition revision 115 and audio format 98. Its current records carry complete source beam groups,
+tremolo clock policies and typed source context while preserving historical guide
+formats. All 64 Hub self-tests and three parallel original page smokes passed. See
+[unreleased changes](../UNRELEASED.md) for exact scope and deployment status; the
+existing public download/tag remains unchanged until an explicitly requested release.
+
 Version 1.6.159 improves printed notes, rests, ties, triplets, repeat endings and expressive playback. It also corrects pickup, tempo and meter handling. The download includes the matching page and audio workers; replace the complete pair when updating.
 
 Version 1.6.146 corrects missed triplets in dense printed passages. Nearby notes on separate stems no longer override the written beam count. This update pairs with Music Sheets 1.18.481 and recognition revision 29; older cached recognition is regenerated when requested.

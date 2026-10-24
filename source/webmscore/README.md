@@ -5,7 +5,7 @@ the qualified Music Sheets renderer candidate. It is separate from the Apache-2.
 standalone interpreter. This source publication does not announce a Hub release
 or claim that the candidate is deployed to Android or the desktop worker.
 
-The latest [ornament and delayed-turn adoption record](adoptions/ornament-delayed-turn-20261014.json)
+The earlier [ornament and delayed-turn adoption record](adoptions/ornament-delayed-turn-20261014.json)
 identifies the rebuilt bundle committed in Music Sheets `2931b984`, retained by
 `2e0fdb9e`. It includes all five ordered supplemental source packets below.
 Thirteen synthetic browser cases, seven reverse-slur PNG/MIDI parity cases and
@@ -13,8 +13,8 @@ six native save/reopen XML/MIDI/PNG cases qualified the bundle. Its four rendere
 assets also match those embedded in the verified full APK build. Render cache
 identity 40 invalidates older converted renderings.
 
-Android visual/haptic UX, whole-library accuracy, desktop deployment and final
-Library publication remain unverified. The prior
+For that earlier adoption, Android visual/haptic UX, whole-library accuracy,
+desktop deployment and final Library publication remained unverified. The prior
 [reverse-slur adoption record](adoptions/reverse-slur-20261014.json), original
 parent manifest, tags and published assets are preserved unchanged. This
 documentation update creates no Hub release.
@@ -38,7 +38,8 @@ in order: `reverse-slur-completion`,
 [articulation/ornament import](unreleased/articulation-ornament-import/README.md),
 [ornament auxiliary state/layout](unreleased/ornament-auxiliaries/README.md),
 [auxiliary playback](unreleased/ornament-auxiliary-playback/README.md), and
-[delayed turns](unreleased/delayed-turn/README.md). Their original packet records
+[delayed turns](unreleased/delayed-turn/README.md), followed by
+[printed chord-line shapes](unreleased/printed-chordline-shapes/README.md). Their original packet records
 describe the source-only evidence available at publication; the new adoption
 record adds subsequent build, synthetic runtime and app-asset verification.
 
