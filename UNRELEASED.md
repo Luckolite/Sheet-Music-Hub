@@ -1,6 +1,15 @@
 # Unreleased changes
 
-The next explicitly requested Hub release will include the paired processing updates prepared with Music Sheets 1.18.513 and internal Hub 1.6.161:
+The next explicitly requested Hub release will include the paired processing updates prepared with Music Sheets 1.18.516 and internal Hub 1.6.162:
+
+- Guide format 295, recognition revision 112, and audio format 97 agree across the app, Hub, page worker, and audio renderer. The page worker retains historical guide formats 260–294.
+- Current records retain printed cue sizes, multi-rest identity, and exact note ownership for natural harmonics and qualitative outgoing falloffs. The accumulated recognition fixes preserve the reviewed source evidence and existing model weights.
+- The matched build passed all 60 Hub self-tests, including real WAV generation, custom recordings, and cross-process audio cache identity. The packaged page worker processed three parallel authored synthetic pages, with four notes each and unchanged source PDFs.
+- The Hub and page worker were deployed together. Live capabilities and the processing log confirm guide 295/recognition 112/audio 97 and the verified decoder build. Existing library settings and the Desktop Hub file identity were preserved; the previous verified pair remains available for fallback.
+
+These checks qualify the matched build on the exercised inputs; they do not establish general note-recognition accuracy.
+
+Earlier paired updates prepared with Music Sheets 1.18.513 and internal Hub 1.6.161:
 
 - Recognition revision 86, guide format 291, and audio format 97 remain aligned across the app, Hub, and page worker.
 - Labelled graphical bends retain quarter-tone amounts and return strokes. Explicit whammy-bar arrows preserve pitch direction; up/down strums order chord attacks by string. Native PDF text keeps separate chord frets from becoming a false tall numeric compound.
