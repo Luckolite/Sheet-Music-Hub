@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "license": "GPL-3.0-only",
+  "packet": "unreleased/chordline-note-ownership/manifest.json",
+  "packetManifestSha256": "a46f3dfb7c5333eb62430ce50de783785ec126c2571bd5eb7fa86984a79c9fd8",
+  "nativeSourceUtf8LfSha256": {
+    "src/engraving/libmscore/chordline.h": "e66e3e1abb31630eace649cd631377ce5c24c5f4185a526c7a5feb7f9e6f256c",
+    "src/engraving/libmscore/chordline.cpp": "1e3dac359de8592af361e609b3023a83b7b2b095426b98ffef111bf78f6e2ef3",
+    "src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "6ec55cc9bbaa24a1ebbc7adf7e7606f4407b62186377c9f149f46460cc58c5ca",
+    "src/importexport/musicxml/internal/musicxml/exportxml.cpp": "52efa29e143490a0273154611d9c1c774ed27edc579500ef3f44da938ceae819"
+  },
+  "bundle": [
+    {
+      "name": "webmscore.js",
+      "bytes": 266198,
+      "sha256": "c92cb95c954dcd615699084ec88bb269e36cb21eea0f6b66c5dc495be2bed675"
+    },
+    {
+      "name": "webmscore.lib.wasm",
+      "bytes": 9265863,
+      "sha256": "3771de8abe3fc9b1c684cd5980b6357d56920bbda2067439f93a597d9275b696"
+    },
+    {
+      "name": "webmscore.lib.mem.wasm",
+      "bytes": 4159123,
+      "sha256": "c459c1ef91a27561c3120918fa8f0fbc1e0518dacd47573dbf21f41da786cc65"
+    },
+    {
+      "name": "webmscore.lib.data",
+      "bytes": 4113025,
+      "sha256": "5fe70ccfeec2791a9bb71c1a3a72f4e28c06380ff4a775b47d056248201bd171"
+    }
+  ],
+  "qualification": {
+    "originalAssertions": 244,
+    "nativeOriginalCases": 6,
+    "earlierNativeRegressionCases": 6,
+    "browserWorkerCases": 2,
+    "canonicalNativeNotePersistence": true,
+    "sourceHeadSvgPlacement": true,
+    "nativePdfVisuallyReviewed": true,
+    "legacyArchiveNotGuessed": true,
+    "retainedSourceReimportRepairs": true,
+    "androidApkPublished": false
+  },
+  "scope": "Original procedural controls only. No private score data or whole-library/Android publication claim."
+}

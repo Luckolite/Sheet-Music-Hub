@@ -1,0 +1,197 @@
+--- a/src/engraving/libmscore/chordline.h
++++ b/src/engraving/libmscore/chordline.h
+@@ -54,6 +54,7 @@
+     double _lengthX = 0.0;
+     double _lengthY = 0.0;
+     Note* _note = nullptr;
++    int _notePitch = -1; // Clone resolution only; native persistence uses Note > ChordLine.
+     static constexpr double _baseLength = 1.0;
+     static constexpr double _waveAngle = 20;
+ 
+@@ -104,8 +105,9 @@
+     bool isToTheLeft() const { return _chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::SCOOP; }
+     bool isBelow() const { return _chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::FALL; }
+ 
+-    void setNote(Note* note) { _note = note; }
+-    Note* note() const { return _note; }
++    void setNote(Note* note);
++    Note* note() const;
++    bool hasNoteOwner() const { return _note != nullptr || _notePitch >= 0; }
+ };
+ } // namespace mu::engraving
+ #endif
+--- a/src/engraving/libmscore/chordline.cpp
++++ b/src/engraving/libmscore/chordline.cpp
+@@ -58,7 +58,52 @@
+     _wavy = cl._wavy;
+     _lengthX = cl._lengthX;
+     _lengthY = cl._lengthY;
+-    _note = cl._note;
++    // A clone must not retain a raw pointer into its original chord/score.
++    const Note* owner = cl.note();
++    _note = nullptr;
++    _notePitch = owner ? owner->pitch() : cl._notePitch;
++}
++
++void ChordLine::setNote(Note* note)
++{
++    _note = note;
++    _notePitch = note ? note->pitch() : -1;
++}
++
++Note* ChordLine::note() const
++{
++    if (!explicitParent()) {
++        return nullptr;
++    }
++    // Check membership before dereferencing a possibly removed or foreign note.
++    if (_note) {
++        Note* live = nullptr;
++        for (Note* candidate : chord()->notes()) {
++            if (candidate == _note) {
++                live = candidate;
++                break;
++            }
++        }
++        if (!live) {
++            return nullptr;
++        }
++        for (Note* candidate : chord()->notes()) {
++            if (candidate != live && candidate->pitch() == live->pitch()) {
++                return nullptr;
++            }
++        }
++        return live;
++    }
++    Note* owner = nullptr;
++    for (Note* candidate : chord()->notes()) {
++        if (candidate->pitch() == _notePitch) {
++            if (owner) {
++                return nullptr; // A pitch key cannot disambiguate unison heads.
++            }
++            owner = candidate;
++        }
++    }
++    return owner;
+ }
+ 
+ //---------------------------------------------------------
+@@ -107,18 +152,19 @@
+ 
+     double _spatium = spatium();
+     if (explicitParent()) {
+-        Note* note = nullptr;
+-
+-        if (_note) {
+-            note = chord()->findNote(_note->pitch());
+-        }
+-
+-        if (!note) {
+-            note = chord()->upNote();
++        Note* owner = note();
++        if (!owner) {
++            if (hasNoteOwner()) {
++                // Never retarget an unresolved explicit owner to the legacy top head.
++                path = PainterPath();
++                setbbox(RectF());
++                return;
++            }
++            owner = chord()->upNote(); // Legacy unbound placement remains unchanged.
+         }
+ 
+         double x = 0.0;
+-        double y = note->pos().y();
++        double y = owner->pos().y();
+         double horOffset = 0.33 * spatium(); // one third of a space away from the note
+         double vertOffset = 0.25 * spatium(); // one quarter of a space from the center line
+         // Get chord shape
+@@ -141,7 +187,7 @@
+         /// TODO: calculate properly the position for wavy type
+         if (_wavy) {
+             bool upDir = _chordLineType == ChordLineType::DOIT;
+-            y += note->height() * (upDir ? 0.8 : -0.3);
++            y += owner->height() * (upDir ? 0.8 : -0.3);
+         }
+ 
+         setPos(x, y);
+@@ -247,6 +293,11 @@
+ 
+ void ChordLine::write(XmlWriter& xml) const
+ {
++    if (hasNoteOwner() && !note()) {
++        // An unresolved owner must not serialize as an unbound legacy/top-head line.
++        LOGW("Skipping unresolved chord-line owner");
++        return;
++    }
+     xml.startElement(this);
+     writeProperty(xml, Pid::CHORD_LINE_TYPE);
+     writeProperty(xml, Pid::CHORD_LINE_STRAIGHT);
+--- a/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
++++ b/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp
+@@ -6278,6 +6278,7 @@
+     if (chordLineType != "") {
+         if (note) {
+             const auto chordline = Factory::createChordLine(note->chord());
++            chordline->setNote(note);
+             if (chordLineType == "falloff") {
+                 chordline->setChordLineType(ChordLineType::FALL);
+             }
+--- a/src/importexport/musicxml/internal/musicxml/exportxml.cpp
++++ b/src/importexport/musicxml/internal/musicxml/exportxml.cpp
+@@ -392,7 +392,7 @@
+     void calcDivMoveToTick(const Fraction& t);
+     void calcDivisions();
+     void keysigTimesig(const Measure* m, const Part* p);
+-    void chordAttributes(Chord* chord, Notations& notations, Technical& technical, TrillHash& trillStart, TrillHash& trillStop);
++    void chordAttributes(Chord* chord, const Note* note, Notations& notations, Technical& technical, TrillHash& trillStart, TrillHash& trillStop);
+     void wavyLineStartStop(const ChordRest* const cr, Notations& notations, Ornaments& ornaments, TrillHash& trillStart,
+                            TrillHash& trillStop);
+     void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart,
+@@ -2963,12 +2963,15 @@
+ //   writeChordLines
+ //---------------------------------------------------------
+ 
+-static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations, Articulations& articulations)
++static void writeChordLines(const Chord* const chord, const Note* note, bool leading, XmlWriter& xml, Notations& notations, Articulations& articulations)
+ {
+     for (EngravingItem* e : chord->el()) {
+         LOGD("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
+         if (e->type() == ElementType::CHORDLINE) {
+             ChordLine const* const cl = static_cast<ChordLine*>(e);
++            if (cl->hasNoteOwner() ? cl->note() != note : !leading) {
++                continue;
++            }
+             QString subtype;
+             switch (cl->chordLineType()) {
+             case ChordLineType::FALL:
+@@ -3018,7 +3021,7 @@
+     }
+ }
+ 
+-void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
++void ExportMusicXml::chordAttributes(Chord* chord, const Note* note, Notations& notations, Technical& technical,
+                                      TrillHash& trillStart, TrillHash& trillStop)
+ {
+     if (!chord->isGrace()) {
+@@ -3065,7 +3068,7 @@
+         _xml.tag(b->isCaesura() ? "caesura" : "breath-mark");
+     }
+ 
+-    writeChordLines(chord, _xml, notations, articulations);
++    writeChordLines(chord, note, true, _xml, notations, articulations);
+ 
+     articulations.etag(_xml);
+ 
+@@ -3857,7 +3860,11 @@
+ 
+             sh.doSlurs(chord, notations, _xml);
+ 
+-            chordAttributes(chord, notations, technical, _trillStart, _trillStop);
++            chordAttributes(chord, note, notations, technical, _trillStart, _trillStop);
++        } else {
++            Articulations articulations;
++            writeChordLines(chord, note, false, _xml, notations, articulations);
++            articulations.etag(_xml);
+         }
+ 
+         writeFingering(_xml, notations, technical, note);

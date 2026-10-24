@@ -1,0 +1,3 @@
+Native MuseScore/webmscore sources and patch: GPL-3.0-only, original MuseScore/LibreScore copyrights retained.
+Original test harnesses, procedural fixture and originals/assets JavaScript: Copyright 2026 Luckolite, Apache-2.0 (headers retained).
+No compiled renderer, score scan, private score, library, device or signing material is included.

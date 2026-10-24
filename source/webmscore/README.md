@@ -103,3 +103,14 @@ allocations that the old renderer ignored; all other MIDI events were unchanged.
 Three original synthetic WAV exports contained finite, non-silent stereo float
 PCM. Waveform timing, Android runtime and paired live deployment remain separate
 verification steps. No private score files or phone logs are included here.
+
+## Canonical chord-line note ownership
+
+The [native note-ownership supplement](unreleased/chordline-note-ownership/README.md)
+applies after printed-chordline-shapes. It includes four complete native sources,
+the minimal incremental patch and self-contained procedural originals/projector
+dependencies with their separate license notices. The [adoption record](adoptions/chordline-note-ownership-20261024.json)
+pins the qualified candidate bundle and bounded original checks. Existing native
+Note nesting preserves exact heads across archive, style and clone paths; old
+ownerless external archives are not guessed or claimed automatically migrated.
+This source publication creates no Hub tag or GitHub release.
