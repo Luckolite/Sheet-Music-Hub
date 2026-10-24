@@ -1,6 +1,16 @@
 # Unreleased changes
 
-The next explicitly requested Hub release will include the paired processing updates prepared with Music Sheets 1.18.517 and internal Hub 1.6.163:
+Current compatible Android update: Music Sheets 1.18.518 (code 991), with the existing internal Hub 1.6.163 pair:
+
+- The signed Android update is published through Windows Library Host. Its live catalog and downloaded APK match SHA-256 `eb23fec6f20bfd88f02e5e511a73cc15c959b76c2eaa96cb95d2f36d4fe44af0`; the signing identity is unchanged.
+- Render revision 43 preserves each pitch-specific scoop, plop and falloff on its exact chord head through native import, MusicXML export, archive/reopen, style edits and excerpt cloning. Persistence uses canonical native Note nesting, with no custom score-format tag. Missing, contradictory and ambiguous ownership remains a refusal.
+- The owner repair passed 244 procedural assertions, six earlier native regressions, two browser Worker cases and rendered original PDF checks. A separate private generated-score scope check verified exact native/MusicXML/SVG/PDF chord-line ownership across export and archive roundtrips. Other pre-existing notation differences remain outside this repair; this does not close a whole-score accuracy contract.
+- Converted-sheet refresh regenerates MusicXML from retained typed source before native reimport. Ownerless external native archives are not guessed or claimed automatically migrated. The [corresponding GPL source and self-contained originals](source/webmscore/unreleased/chordline-note-ownership/README.md) are pinned by source commit `abc6336c6fdb202cedf7726099f90ebb4ba674f4`.
+- The deployed Hub/page/audio worker pair remains 1.6.163 with Guide 299, recognition 115 and audio 98. Its existing 64-self-test and three-page packaged smoke qualification remains applicable; this renderer update requires no worker rebuild or minimum-app compatibility change.
+
+No Hub tag, GitHub release or replacement of existing release assets is created.
+
+Earlier paired updates prepared with Music Sheets 1.18.517 and internal Hub 1.6.163:
 
 - Guide format 299, recognition revision 115 and audio format 98 agree across the app, Hub, page worker and audio renderer, retaining historical guide 260-298 support. Current records preserve complete source-beam ownership, typed tremolo clock policies and source-clock/context observations without treating missing or contrary evidence as a timing policy.
 - The reviewed decoder includes exact parenthesized-group ownership and current notation/record compatibility. A supplied-measure blank/no-staff page retains matching source-context counts across local and desktop transport. Model weights remain unchanged.

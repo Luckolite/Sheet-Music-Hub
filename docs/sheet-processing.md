@@ -11,9 +11,13 @@ formats. All 64 Hub self-tests and three parallel original page smokes passed. S
 [unreleased changes](../UNRELEASED.md) for exact scope and deployment status; the
 existing public download/tag remains unchanged until an explicitly requested release.
 
-The matching Android 1.18.517 update (code 990) is published and catalog/download
-verified in Windows Library Host. Existing Hub release tags and download assets
-remain unchanged.
+The current matching Android update is 1.18.518 (code 991), published and
+catalog/download verified in Windows Library Host. Render revision 43 keeps
+pitch-specific chord lines on their exact note heads through native/archive and
+MusicXML roundtrips. Converted-sheet refresh reimports retained typed source;
+ownerless external native archives are not automatically reassigned. The deployed
+Hub 1.6.163 / Guide 299 / recognition 115 / audio 98 pair remains unchanged.
+Existing Hub release tags, download assets and compatibility minimums remain unchanged.
 
 Version 1.6.159 improves printed notes, rests, ties, triplets, repeat endings and expressive playback. It also corrects pickup, tempo and meter handling. The download includes the matching page and audio workers; replace the complete pair when updating.
 
