@@ -11,6 +11,10 @@ formats. All 64 Hub self-tests and three parallel original page smokes passed. S
 [unreleased changes](../UNRELEASED.md) for exact scope and deployment status; the
 existing public download/tag remains unchanged until an explicitly requested release.
 
+The matching Android 1.18.517 update (code 990) is published and catalog/download
+verified in Windows Library Host. Existing Hub release tags and download assets
+remain unchanged.
+
 Version 1.6.159 improves printed notes, rests, ties, triplets, repeat endings and expressive playback. It also corrects pickup, tempo and meter handling. The download includes the matching page and audio workers; replace the complete pair when updating.
 
 Version 1.6.146 corrects missed triplets in dense printed passages. Nearby notes on separate stems no longer override the written beam count. This update pairs with Music Sheets 1.18.481 and recognition revision 29; older cached recognition is regenerated when requested.
