@@ -45,13 +45,14 @@
     "originals/README.md": "931bce864b24d18cbf6a07043810f1c0d554112c54982e6c2c24281d7aeaffdf",
     "originals/test_archive_migration.cjs": "81abe757d016eefe7ffa0830aa65af654cc2e8340d6990f3c18d645cdfea0107",
     "originals/test_originals.cjs": "5ed47ee8df7ea59d04c1483fe4c0e5c33807fb86dc7f19f5521489471c019274",
-    "originals/assets/chordline-export.js": "2a6e341504cf1444281c57502f408f921c501780a30e24be219163fd0574db9b",
+    "originals/assets/chordline-export.js": "c5b59bd3a50ecefadb2f3ca7615510a610c8874a2e7a976b2bec2eb4e881f198",
     "originals/assets/hairpin-identity.js": "6b3161e1c872495aa2bebbb8f347bf9724a5116f343aac0ceb1da0b93b8c2b98",
     "originals/assets/hairpin-source.js": "6b6f02ccb6ece3b177d8c3e54db59a7ce0503bce64c61dfb717fbb0d14d47248",
     "originals/fixtures/two-head-two-scoop.musicxml": "f5b55741e3ad69408519868ec35f36a22d4b2869ef20424da9111fa459c69b8e",
     "source/src/engraving/libmscore/chordline.cpp": "1e3dac359de8592af361e609b3023a83b7b2b095426b98ffef111bf78f6e2ef3",
     "source/src/engraving/libmscore/chordline.h": "e66e3e1abb31630eace649cd631377ce5c24c5f4185a526c7a5feb7f9e6f256c",
     "source/src/importexport/musicxml/internal/musicxml/exportxml.cpp": "52efa29e143490a0273154611d9c1c774ed27edc579500ef3f44da938ceae819",
-    "source/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "6ec55cc9bbaa24a1ebbc7adf7e7606f4407b62186377c9f149f46460cc58c5ca"
+    "source/src/importexport/musicxml/internal/musicxml/importmxmlpass2.cpp": "6ec55cc9bbaa24a1ebbc7adf7e7606f4407b62186377c9f149f46460cc58c5ca",
+    ".gitattributes": "30233c263f5a9cb70db1cb4ebd74e0d29a2f21472d11074ffb0d387c2adec2f1"
   }
 }

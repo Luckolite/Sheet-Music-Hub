@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "license": "GPL-3.0-only",
   "packet": "unreleased/chordline-note-ownership/manifest.json",
-  "packetManifestSha256": "a46f3dfb7c5333eb62430ce50de783785ec126c2571bd5eb7fa86984a79c9fd8",
+  "packetManifestSha256": "d2719b1b5b0baefa3cf3cf21ace7e9143ff561a59767c07077c2e3175ea71a3d",
   "nativeSourceUtf8LfSha256": {
     "src/engraving/libmscore/chordline.h": "e66e3e1abb31630eace649cd631377ce5c24c5f4185a526c7a5feb7f9e6f256c",
     "src/engraving/libmscore/chordline.cpp": "1e3dac359de8592af361e609b3023a83b7b2b095426b98ffef111bf78f6e2ef3",
