@@ -1,6 +1,16 @@
 # Unreleased changes
 
-Current compatible Android update: Music Sheets 1.18.518 (code 991), with the existing internal Hub 1.6.163 pair:
+Current compatible Android update: Music Sheets 1.18.519 (code 992), paired with internal Hub 1.6.164:
+
+- Identical source-beam groups and detached columns shared by retained page views are coalesced without changing physical group identity or note-origin occurrences. Contradictory same-ID groups still refuse. The standalone interpreter counterpart is committed on main.
+- The matched decoder/page/audio worker pair was rebuilt from shipped 1.18.518 plus the qualified beam-joining repair. Guide 299, recognition 115 and audio 98 retain their existing record and performance contracts; model weights are unchanged.
+- All 64 Hub self-tests and three authored parallel page smokes passed. Current source fingerprint: `cd404b86b4ea44aa7555ca76f426042e5dec66213d4bd1b104fa1530d779ada0`; decoder JAR SHA-256: `f0426eab5e333522e4a619c139b5c97c6ebe43516bcd2010d0b5805f69be8bc0`. Audio source fingerprint: `55a0e35e552b2cbbdbe836f5a7fd6698b2787f8ddfc3e55a87d01765de75242f`.
+- Desktop Hub/worker deployment is verified by exact executable/JAR checksums, live capabilities and a fresh processing-log capability record. The existing Desktop filename, creation time, icon resources, configuration and library data are preserved; the prior verified pair is retained.
+- The signed Android update is published through Windows Library Host. Its live catalog and downloaded APK match SHA-256 `a8420fd09d7626ce70414d81ada76bb1feeba41298bd0ab9727236f940c3faf0` with the existing signing identity. Render revision 43 and the qualified GPL renderer source remain unchanged.
+
+These checks qualify the exercised input and transport contracts, not whole-library recognition accuracy. No Hub tag or GitHub release is created.
+
+Earlier renderer-only Android update: Music Sheets 1.18.518 (code 991), with the internal Hub 1.6.163 pair:
 
 - The signed Android update is published through Windows Library Host. Its live catalog and downloaded APK match SHA-256 `eb23fec6f20bfd88f02e5e511a73cc15c959b76c2eaa96cb95d2f36d4fe44af0`; the signing identity is unchanged.
 - Render revision 43 preserves each pitch-specific scoop, plop and falloff on its exact chord head through native import, MusicXML export, archive/reopen, style edits and excerpt cloning. Persistence uses canonical native Note nesting, with no custom score-format tag. Missing, contradictory and ambiguous ownership remains a refusal.

@@ -4,6 +4,17 @@ The Hub processes queued pages on your PC and syncs the results back to Music Sh
 The download includes its matching processor; keep `MusicSheetsNativePage` beside the EXE.
 From the app's Hub panel, pause processing, choose up to five workers, or retry pages.
 
+The current internal 1.6.164 build is paired with Music Sheets 1.18.519 (code 992).
+It preserves Guide 299/recognition 115/audio 98 and coalesces identical physical
+source-beam facts shared by joined retained page views. Conflicting group
+identities remain rejected; note-origin occurrences are preserved. The pair
+passed 64 Hub self-tests and three parallel authored page smokes and is live
+verified on the Desktop. The matching signed APK is catalog/download verified
+in Windows Library Host (SHA-256 `a8420fd09d7626ce70414d81ada76bb1feeba41298bd0ab9727236f940c3faf0`).
+Render revision 43 and the previously qualified native rendering path remain unchanged.
+
+Earlier processing qualification:
+
 The internal 1.6.163 paired build prepared with Music Sheets 1.18.517 uses Guide 299,
 recognition revision 115 and audio format 98. Its current records carry complete source beam groups,
 tremolo clock policies and typed source context while preserving historical guide
