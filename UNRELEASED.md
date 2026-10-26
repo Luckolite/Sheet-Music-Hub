@@ -1,6 +1,18 @@
 # Unreleased changes
 
-Current compatible Android update: Music Sheets 1.18.519 (code 992), paired with internal Hub 1.6.164:
+Current compatible Android update: Music Sheets 1.18.520 (code 993), paired with internal Hub 1.6.165:
+
+- Ships the reviewed measure-editor warning fixes, converted-sheet refresh, source-beam frame/endpoint recognition, and literal Current-rest playback clock handling. Unqualified faint-beam, tuplet and typed-writer experiments remain outside this update.
+- Guide299 and active conversion/baseline producer2 layouts are unchanged. Recognition116 refreshes earlier interpretations; audio99 invalidates completed desktop jobs before the corrected rest-aware clock is resolved. Model weights and the adopted native renderer bundle are unchanged.
+- The matched build passed 64 Hub self-tests (including real WAV and cross-process cache identity) and three parallel authored page smokes with four notes per page and unchanged PDFs. Live capabilities, executable/JAR hashes and the fresh processing log verify the installed pair. Existing Hub configuration and Desktop file creation time are preserved.
+- Decoder source fingerprint: `86c72cc71a2b98cef037e8d3d6787eede308c171f6c9eb811da9cbcab71093d2`; decoder JAR SHA-256: `5970e47e406a996afe45b9bbd9fdbdf00895089d04f32282c197f900d302a91f`. Audio source fingerprint: `a4fb23981dadc1cfcf900cab2ae662b54b019b5317e94a9ca7d76fa629383959`.
+- The stable-signed APK is published through Windows Library Host; its actual download and the Desktop APK offer match SHA-256 `b94cdfcff458ac7d11677aa60730ac3342a36a6af196184104e17a98380094ef`. Android verification passed 233 targeted unit tests, 4,737 arc-layout controls and lint with zero errors; prior unchanged emulator and browser proofs were reused. This task does not claim a new phone installation.
+- App source: `09661162ce10ee87a4abeeae1041253eac336cf2`; standalone interpreter: `56128749953b9a202fd1a736736e19e8e29aca4e` with all 676 mapped-source checks passing. The reviewed rest batch passed 14,253 Java tests, 1,030 Python tests (45 skipped), and authored PNG/PDF playback/export smoke checks; cache-epoch follow-up tests passed separately.
+
+These checks cover the exercised inputs and compatibility contracts, not general recognition accuracy. No Hub tag or GitHub release is created. Existing public downloads remain unchanged.
+
+Earlier paired update with Music Sheets 1.18.519 (code 992) and internal Hub 1.6.164:
+
 
 - Identical source-beam groups and detached columns shared by retained page views are coalesced without changing physical group identity or note-origin occurrences. Contradictory same-ID groups still refuse. The standalone interpreter counterpart is committed on main.
 - The matched decoder/page/audio worker pair was rebuilt from shipped 1.18.518 plus the qualified beam-joining repair. Guide 299, recognition 115 and audio 98 retain their existing record and performance contracts; model weights are unchanged.

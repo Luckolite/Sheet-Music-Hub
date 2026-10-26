@@ -4,14 +4,17 @@ The Hub processes queued pages on your PC and syncs the results back to Music Sh
 The download includes its matching processor; keep `MusicSheetsNativePage` beside the EXE.
 From the app's Hub panel, pause processing, choose up to five workers, or retry pages.
 
-The current internal 1.6.164 build is paired with Music Sheets 1.18.519 (code 992).
-It preserves Guide 299/recognition 115/audio 98 and coalesces identical physical
-source-beam facts shared by joined retained page views. Conflicting group
-identities remain rejected; note-origin occurrences are preserved. The pair
-passed 64 Hub self-tests and three parallel authored page smokes and is live
-verified on the Desktop. The matching signed APK is catalog/download verified
-in Windows Library Host (SHA-256 `a8420fd09d7626ce70414d81ada76bb1feeba41298bd0ab9727236f940c3faf0`).
-Render revision 43 and the previously qualified native rendering path remain unchanged.
+The current internal 1.6.165 build is paired with Music Sheets 1.18.520 (code 993).
+It uses Guide299, recognition116 and audio99 with rebuilt matching page/audio
+workers. The update includes source-beam frame/endpoint recognition and Current-rest
+playback clock fixes. Earlier interpretations and completed audio jobs are invalidated;
+active conversion/baseline producer2 layouts and model weights remain unchanged.
+All 64 Hub self-tests and three parallel authored page smokes passed. Live Desktop
+capabilities, decoder hashes and the processing log verify the installed pair.
+The stable-signed Android APK is catalog/download verified in Windows Library Host
+(SHA-256 `b94cdfcff458ac7d11677aa60730ac3342a36a6af196184104e17a98380094ef`).
+Configuration and the previous verified pair are preserved. See [unreleased changes](../UNRELEASED.md)
+for verification scope; existing public release downloads remain unchanged.
 
 Earlier processing qualification:
 
