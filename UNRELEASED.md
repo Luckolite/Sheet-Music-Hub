@@ -1,21 +1,15 @@
 # Unreleased changes
 
-Source changes awaiting a matched runtime update:
+Current local desktop deployment: internal Hub 1.6.169 with the matched recognition124 page/audio worker pair (2026-10-28):
 
-- Compatibility diagnostics distinguish unsupported device guide formats from
-  newer recognition revisions and distinguish worker protocol, guide and
-  recognition mismatches. Messages include the requested and supported revision
-  instead of blaming a supported guide format. Existing refusal gates remain.
-- The Hub source recognition identity advances to 121 alongside the reviewed
-  faded-flag and broad tremolo-mask recovery packet. Guide299/audio101 layouts
-  and model weights are unchanged. The native decoder explicitly selects the
-  new shaft helper. These source changes do not update the installed Hub/worker
-  or existing public release downloads.
-- The diagnostic source passed a clean build and all 65 Hub self-tests using
-  an isolated, source-matched audio101 bundle. Repeated abrupt TLS disconnects
-  remain unqualified for a protocol change without a live reproduction.
+- Includes the qualified recognition progress through literal bow-tip and pen-stroke ownership, the retained faded-flag/tremolo packet, and precise device/worker compatibility diagnostics. Existing refusal gates remain; Guide299/audio101 layouts and model weights are unchanged.
+- The matching pair passed all 65 Hub self-tests and three parallel authored page smokes with four notes per page and unchanged source PDFs. The [public interpreter source](https://github.com/Luckolite/Sheet-Music-Interpreter/commit/3f365f1d57fa33b7fa277ef861a190620ea4a4b8) passed Windows/Linux CI; all 753 mapped app sources matched reviewed provenance.
+- Installed capabilities and exact executable/JAR hashes match the staged pair. Fresh recognition124 capability, page-start and page-publication logs confirm live processing resumed after the prior revision mismatch. Configuration bytes, original library-file metadata, the existing Desktop shortcut and executable creation time are preserved. The previous pair is retained for rollback.
+- Decoder source fingerprint: `e6dd280dc0b269e1441bfbc3384844ee305849d83c6fa68762463747d7f8c92d`; decoder JAR SHA-256: `e3390110aaf9fb662851252e47131190f53d90875951c1eb19d79299280f9368`; audio source fingerprint: `6b004edc8d1eb1820a41ec9687fabb60d240bac50ccaec86d7ff593f7e109e37`.
 
-Current compatible Android update: Music Sheets 1.18.520 (code 993), paired with internal Hub 1.6.165:
+This desktop deployment does not publish an Android APK/Library update or close the remaining recognition audit. Repeated abrupt TLS disconnects remain unqualified for a protocol change without a live reproduction. No Hub tag or GitHub release is created; existing public downloads remain unchanged.
+
+Earlier compatible Android update: Music Sheets 1.18.520 (code 993), paired with internal Hub 1.6.165:
 
 - Ships the reviewed measure-editor warning fixes, converted-sheet refresh, source-beam frame/endpoint recognition, and literal Current-rest playback clock handling. Unqualified faint-beam, tuplet and typed-writer experiments remain outside this update.
 - Guide299 and active conversion/baseline producer2 layouts are unchanged. Recognition116 refreshes earlier interpretations; audio99 invalidates completed desktop jobs before the corrected rest-aware clock is resolved. Model weights and the adopted native renderer bundle are unchanged.
