@@ -1,5 +1,20 @@
 # Unreleased changes
 
+Source changes awaiting a matched runtime update:
+
+- Compatibility diagnostics distinguish unsupported device guide formats from
+  newer recognition revisions and distinguish worker protocol, guide and
+  recognition mismatches. Messages include the requested and supported revision
+  instead of blaming a supported guide format. Existing refusal gates remain.
+- The Hub source recognition identity advances to 121 alongside the reviewed
+  faded-flag and broad tremolo-mask recovery packet. Guide299/audio101 layouts
+  and model weights are unchanged. The native decoder explicitly selects the
+  new shaft helper. These source changes do not update the installed Hub/worker
+  or existing public release downloads.
+- The diagnostic source passed a clean build and all 65 Hub self-tests using
+  an isolated, source-matched audio101 bundle. Repeated abrupt TLS disconnects
+  remain unqualified for a protocol change without a live reproduction.
+
 Current compatible Android update: Music Sheets 1.18.520 (code 993), paired with internal Hub 1.6.165:
 
 - Ships the reviewed measure-editor warning fixes, converted-sheet refresh, source-beam frame/endpoint recognition, and literal Current-rest playback clock handling. Unqualified faint-beam, tuplet and typed-writer experiments remain outside this update.
