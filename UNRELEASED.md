@@ -1,8 +1,17 @@
 # Unreleased changes
 
-Current local desktop deployment: internal Hub 1.6.170 supports the latest installed Google Play and personal/Dev apps together (2026-10-29):
+Current local desktop deployment: Hub 1.6.172 corrects app-version readiness reporting and restores the published personal/Dev worker (2026-10-29):
 
-- Google Play 1.0.6 uses its qualified recognition119 worker; personal/Dev 1.18.524 uses recognition124. Both use Guide299/audio101. Authenticated peers retain independent cache contracts, exact worker selection, publication checks and audio completion state. Shared originals and library settings stay in the existing library.
+- The published personal/Dev 1.18.524 APK (code997) actually uses recognition120, verified from its compiled APK and matching source. The previous recognition124 association described the desktop source candidate, not the installed APK. A separately built and pinned120 worker now accompanies Play119 and the current124 candidate without relabelling their results.
+- Each app receives processing counts, active workers, retries and failures for its own exact contract. Aggregate desktop counts no longer appear as readiness for another app. Optional contract metadata lets newer apps reject a stale first report after upgrading.
+- Android source labels completion as "ready on Hub" and explains that transfer and local preparation may still remain. Those Android changes require the next app update; a Hub update alone cannot change installed app wording.
+- Paired updates require both published profiles, `compat/google-play` and `compat/personal-dev`. Explicit qualified roots take precedence and component pins are checked before staged data is replaced. Existing public downloads remain unchanged; no tag or GitHub release is created.
+- Validation: 69 Hub self-tests, 15 Android status tests, 13 staging controls, offline Android production Java compilation, and 12 packaged authored pages passed. The installed workers qualify119/120/124 and actual120 pages publish into their own lane. Configuration, shortcut and all2,037 original-file metadata entries were preserved. Phone receipt/usability is a separate check and was not claimed from desktop publication.
+- Deployment now recognizes the running installed Hub by pinned bytes when Windows exposes an MSIX-redirected path. An explicitly reused prepared worker is fully compared against staging before retrying; the previous verified pair remains available.
+
+Earlier local desktop deployment: internal Hub 1.6.170 introduced independent app contracts (2026-10-29):
+
+- Google Play 1.0.6 uses its qualified recognition119 worker; the desktop source candidate uses recognition124. Both use Guide299/audio101. The published personal/Dev APK uses120 and therefore also needs its own matching worker, added in172. Authenticated peers retain independent cache contracts, exact worker selection, publication checks and audio completion state. Shared originals and library settings stay in the existing library.
 - Hub updates preserve `MusicSheetsNativePage/compat/google-play`; advancing Dev no longer replaces Play's processing contract. Missing or mismatched workers affect their own contract while other supported apps continue. One shared worker limit and fair scheduling cover both apps.
 - Validation passed all 68 Hub self-tests, including TLS transfers in both sync directions/orders and restart, plus three normal packaged pages and three pages through each actual app worker. Every authored page retained four notes and unchanged PDF bytes. Live worker qualification confirms both revisions; configuration, shortcut and all 1,890 original-file metadata entries are preserved.
 - No Android APK, Play submission, Hub tag or GitHub release is created. Existing public downloads remain tied to their original builds.

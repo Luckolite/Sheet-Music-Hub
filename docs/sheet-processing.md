@@ -4,12 +4,19 @@ The Hub processes queued pages on your PC and syncs the results back to Music Sh
 The download includes its matching processor; keep `MusicSheetsNativePage` beside the EXE.
 From the app's Hub panel, pause processing, choose up to five workers, or retry pages.
 
-The current internal Hub 1.6.170 supports the latest Google Play and personal/Dev
-apps together. Each app keeps its own exact processing contract and matching
-qualified worker; a Dev update cannot replace Play's derived cache. Keep the
-`MusicSheetsNativePage/compat/google-play` bundle when updating the Hub. Both apps
-share the existing original library while their derived results remain isolated.
-The paired update passed 68 self-tests and packaged page checks for both workers.
+The deployed internal Hub 1.6.172 supplies separate workers for the published Google Play
+and personal/Dev apps alongside the current desktop source candidate. Published
+Play1.0.6 uses recognition119; published personal1.18.524 uses120, while the
+desktop candidate uses124. Each app keeps its own exact processing contract and
+receives progress only for that contract. Keep both `compat/google-play` and
+`compat/personal-dev` under `MusicSheetsNativePage` when updating the Hub.
+Both apps share the original library while derived results remain isolated.
+
+"Ready on Hub" means the desktop has processed those pages for your app version.
+Sync and preparation on the phone may still remain. The library's `cached:true`
+filter selects sheets with caching enabled; an hourglass indicates that the
+sheet is still incomplete on that device. Android wording changes arrive with
+the next app update.
 
 The current internal 1.6.165 build is paired with Music Sheets 1.18.520 (code 993).
 It uses Guide299, recognition116 and audio99 with rebuilt matching page/audio
