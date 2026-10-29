@@ -1,5 +1,12 @@
 # Unreleased changes
 
+Current local desktop deployment: internal Hub 1.6.170 supports the latest installed Google Play and personal/Dev apps together (2026-10-29):
+
+- Google Play 1.0.6 uses its qualified recognition119 worker; personal/Dev 1.18.524 uses recognition124. Both use Guide299/audio101. Authenticated peers retain independent cache contracts, exact worker selection, publication checks and audio completion state. Shared originals and library settings stay in the existing library.
+- Hub updates preserve `MusicSheetsNativePage/compat/google-play`; advancing Dev no longer replaces Play's processing contract. Missing or mismatched workers affect their own contract while other supported apps continue. One shared worker limit and fair scheduling cover both apps.
+- Validation passed all 68 Hub self-tests, including TLS transfers in both sync directions/orders and restart, plus three normal packaged pages and three pages through each actual app worker. Every authored page retained four notes and unchanged PDF bytes. Live worker qualification confirms both revisions; configuration, shortcut and all 1,890 original-file metadata entries are preserved.
+- No Android APK, Play submission, Hub tag or GitHub release is created. Existing public downloads remain tied to their original builds.
+
 Current local desktop deployment: internal Hub 1.6.169 with the matched recognition124 page/audio worker pair (2026-10-28):
 
 - Includes the qualified recognition progress through literal bow-tip and pen-stroke ownership, the retained faded-flag/tremolo packet, and precise device/worker compatibility diagnostics. Existing refusal gates remain; Guide299/audio101 layouts and model weights are unchanged.
