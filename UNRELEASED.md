@@ -1,6 +1,18 @@
 # Unreleased changes
 
-Current local desktop deployment: Hub 1.6.172 corrects app-version readiness reporting and restores the published personal/Dev worker (2026-10-29):
+Current local desktop deployment: Hub 1.6.176 with the matching recognition 135 page/audio worker (2026-10-31):
+
+- Grand-staff boundaries retain independently owned contacting heads and beams; closed meter counters no longer create empty musical bars; connected beam shoulders no longer become augmentation dots. Normal playback and re-engraving convert the saved tempo to the quarter-note clock only once, preserving printed pulse units and later tempo ratios.
+- Guide 299/audio 101, model weights and record layouts remain unchanged. The current desktop core uses 135 and supports personal/Dev 1.18.532 (code 1005). Separately pinned compatibility workers retain the previous personal/Dev 1.18.531 contract 129 and Google Play 1.0.6 contract 119. Results are never relabelled between contracts.
+- Validation passed 71 Hub self-tests and 12 packaged authored pages: three parallel current pages plus nine pages across the current 135, personal 129 and Play 119 contracts. Every authored page retained four notes and unchanged PDF bytes. Installed capabilities, exact artifact hashes and fresh automatic 135 page publications verify the deployed pair; these checks do not certify every library page or a new phone installation.
+- Configuration, shortcut, Hub creation time and the prior 175/129 fallback were preserved. All 3,187 pre-existing library files remain present: 3,186 payloads are byte-identical; only the generated cache-version index intentionally advanced 129→135. New processing cache files are retained separately. The prior APK 531 remains retained for rollback.
+- Android 1.18.532 (code 1005) is published through Windows Library Host with the existing signing identity. The live catalog, downloaded APK and Hub update source/manifest match SHA-256 `e8611c427f7ddf779e8bcce7d132ace5162694d62cd1dc2c940248c4fc262663`. Android emulator verification passed; no physical-phone installation or validation is claimed.
+- The reviewed [standalone interpreter source](https://github.com/Luckolite/Sheet-Music-Interpreter/commit/ff3342ef97c911a5f8a9b0384ca299c3aacd39ee) is published on main. The GPL renderer and its corresponding-source packets are unchanged.
+- Decoder source fingerprint: `02b4056a05af385080594076ed67729f77d1703966ba42c9bb4dad4877398616`; packaged decoder JAR SHA-256: `200fce0c378c5e73db232592dc0606f1bf22cee762e84e88a17b8f1bbddcec8f`; audio source fingerprint: `6c4634911d56531ac6db8b00c306d2e0be9809538cd29e513e388b70046c0316`.
+
+No Hub tag, GitHub release, prerelease, draft release or replacement download asset is created. Existing public 1.6.159 downloads remain tied to their original build. Android Library publication was verified separately and does not create a Hub release.
+
+Earlier local desktop deployment: Hub 1.6.172 corrects app-version readiness reporting and restores the published personal/Dev worker (2026-10-29):
 
 - The published personal/Dev 1.18.524 APK (code997) actually uses recognition120, verified from its compiled APK and matching source. The previous recognition124 association described the desktop source candidate, not the installed APK. A separately built and pinned120 worker now accompanies Play119 and the current124 candidate without relabelling their results.
 - Each app receives processing counts, active workers, retries and failures for its own exact contract. Aggregate desktop counts no longer appear as readiness for another app. Optional contract metadata lets newer apps reject a stale first report after upgrading.
