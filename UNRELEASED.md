@@ -1,6 +1,14 @@
 # Unreleased changes
 
-Current local desktop deployment: Hub 1.6.177 with the matching recognition 136 page/audio worker (2026-11-01):
+Current local desktop deployment: Hub 1.6.178 with the matching recognition 137 page/audio worker (2026-11-05).
+
+- Recognition fixes compact ties, split-system tie ownership, short slurs next to beams, and an opening whole-measure rest printed under the meter. Fractional metronome values are read at the written pulse. The conversion exporter uses the exact quarter-note tempo when the requested pulse would require a repeating decimal.
+- Guide 299 and audio 101 use the existing record layouts. The paired build passed 71 Hub self-tests and 12 packaged synthetic pages across current recognition 137, prior personal/Dev 136, and Google Play 119. Each page retained four notes and unchanged PDF bytes.
+- Installed Hub and worker executable hashes match staging. The live processing log records successful revision 137 page publications. The older Dev 135 and 129 bundles were carried forward with every file hash verified and both qualified by the live registry. The previous verified Hub/worker pair is retained.
+- The [reviewed standalone interpreter changes](https://github.com/Luckolite/Score-OMR/commit/08f8d983a403b7aea1e12eab2c670ba31f65704f) are published on main.
+- Music Sheets 1.18.537 (code 1010) is published through Windows Library Host with the existing signing identity. The live catalog, served APK and Hub update manifest agree on SHA-256 `06609822db1d46991eef6ab68a30e880e2c29fa852ad3292a052be8d31d6ad8f`. Offline lint and packaging passed, and the emulator installed the update in place and launched it.
+
+Earlier local desktop deployment: Hub 1.6.177 with the matching recognition 136 page/audio worker (2026-11-01):
 
 - Seven recognition/playback families are corrected: repeated key-signature flats retain header ownership; intrinsic octave treble clefs retain their octave; ledger/octave-bracket strokes no longer become tenutos; accents retain their physical staff; complete printed phrase curves retain endpoint ownership; complete cross-staff double beams retain written values; opposed-stem cross-staff voices retain independent written sustain. Earlier timing fixes remain in place. These are general geometry/ownership repairs with unchanged model weights.
 - Guide 299/audio 101 and record layouts remain unchanged. Current 136 serves personal/Dev 1.18.534 (code 1007); separately pinned compatibility workers retain 135, 129 and Play 119. Each app receives its exact contract; results are never relabelled.
