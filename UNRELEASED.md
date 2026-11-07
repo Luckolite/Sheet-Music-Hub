@@ -1,6 +1,17 @@
 # Unreleased changes
 
-Current local desktop deployment: Hub 1.6.178 with the matching recognition 137 page/audio worker (2026-11-05).
+Current local desktop deployment: Hub 1.6.181 with the matching recognition 140 page/audio worker (2026-11-07).
+
+- Decoder-only paper correction estimates smooth brightness and contrast for shadowed or tinted pages. Original segmentation, tab preparation, OCR and source annotation provenance remain separate. Clean pages bypass correction. Guide 299 and audio 102 retain their record layouts.
+- The new Apache-2.0 model is pinned to SHA-256 `dc27aec9f1d29cc423510277992523991fbbb568770a3acf73875107476ab460`. Original training architecture, augmentation, export recipe, corpus checksums and bounded synthetic evaluation are included in the [published interpreter source](https://github.com/Luckolite/Sheet-Music-Recognition/commit/8d6faa57658616b5da8fcc4ace4599e8366f6e20). Real photographed/scanned score accuracy remains unverified.
+- Qualification passed 71 Hub self-tests and nine packaged synthetic pages across candidate 140, published personal 139 and Google Play 119. Each retained four notes and unchanged PDF bytes. Independently pinned 138 and 136 profiles remain qualified. Two fresh shaded procedural pages activate correction while retaining all four expected notes; three clean retained pages preserve every score field, source-clock field and all 752 notes.
+- Music Sheets 1.18.543 (code 1016) is published through Windows Library Host with the established signing identity. Catalog, served APK and Hub update offer agree on SHA-256 `14c386996050a3b6352009935598b58aae952f9eb8a363c5b96201d546c7cd61`. Android focused tests and lint passed, two actual bundled-model emulator tests passed, and the optimized release installed in place and launched. No physical-phone installation is claimed.
+- The final standalone qualification covers 15,469 existing Java cases plus two new raster-boundary cases, using the full suite and the corrected cache-expectation rerun; Python ran 1,072 cases with 45 optional skips. PNG/PDF pitch-duration, MIDI/MusicXML/MP3 smoke passed. These exercised inputs do not establish general recognition accuracy.
+- No Hub tag, prerelease, draft release or GitHub release was created. Existing tagged downloads remain unchanged.
+
+- Installed Hub/worker hashes and live revision140 page publications verify the deployment. All2,053 original media payload hashes, configuration bytes and Hub creation time are preserved. The previous verified139 pair remains available.
+
+Earlier local desktop deployment: Hub 1.6.178 with the matching recognition 137 page/audio worker (2026-11-05).
 
 - Recognition fixes compact ties, split-system tie ownership, short slurs next to beams, and an opening whole-measure rest printed under the meter. Fractional metronome values are read at the written pulse. The conversion exporter uses the exact quarter-note tempo when the requested pulse would require a repeating decimal.
 - Guide 299 and audio 101 use the existing record layouts. The paired build passed 71 Hub self-tests and 12 packaged synthetic pages across current recognition 137, prior personal/Dev 136, and Google Play 119. Each page retained four notes and unchanged PDF bytes.
