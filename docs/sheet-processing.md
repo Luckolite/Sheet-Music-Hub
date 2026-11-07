@@ -8,7 +8,7 @@ The deployed internal Hub 1.6.178 uses the matching recognition 137 page and
 audio worker, with Guide 299 and audio 101. Music Sheets 1.18.537 (code 1010)
 uses this contract and is available through Windows Library Host. The update improves tie
 ownership, short slurs near beams, opening measure rests and decimal tempo
-marks. See the [reviewed interpreter commit](https://github.com/Luckolite/Score-OMR/commit/08f8d983a403b7aea1e12eab2c670ba31f65704f).
+marks. See the [reviewed interpreter commit](https://github.com/Luckolite/Sheet-Music-Recognition/commit/08f8d983a403b7aea1e12eab2c670ba31f65704f).
 
 Keep the full `compat` folder with the matching processor. The worker selects
 the qualified bundle for each app contract. Original library data is shared
