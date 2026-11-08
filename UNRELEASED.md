@@ -1,6 +1,10 @@
 # Unreleased changes
 
-Current local desktop deployment: Hub 1.6.181 with the matching recognition 140 page/audio worker (2026-11-07).
+Current local desktop deployment: Hub 1.6.182 with the matching recognition 140 page/audio worker (2026-11-08).
+
+- Personal Music Sheets can transcribe a local audio track into a melody-and-chord lead sheet using SheetSage on the paired desktop Hub. The encrypted transfer verifies audio and PDF hashes; generated pages append through the app's source-identity and state transaction guards.
+- An optional dedicated WSL2/Docker CPU worker runs separately from the OMR worker. Setup pins the upstream container digest and verifies all seven model assets against original upstream checksums, using a pinned public mirror because the original S3 model URLs return HTTP 403. The models remain external, under their upstream noncommercial license.
+- Hub transfer tests cover malformed requests, audio corruption and an unavailable worker. A real synthetic-audio transcription generated a visually checked PDF. Guide 299, recognition 140 and audio 102 remain unchanged; no Hub tag or public release is created.
 
 - Decoder-only paper correction estimates smooth brightness and contrast for shadowed or tinted pages. Original segmentation, tab preparation, OCR and source annotation provenance remain separate. Clean pages bypass correction. Guide 299 and audio 102 retain their record layouts.
 - The new Apache-2.0 model is pinned to SHA-256 `dc27aec9f1d29cc423510277992523991fbbb568770a3acf73875107476ab460`. Original training architecture, augmentation, export recipe, corpus checksums and bounded synthetic evaluation are included in the [published interpreter source](https://github.com/Luckolite/Sheet-Music-Recognition/commit/8d6faa57658616b5da8fcc4ace4599e8366f6e20). Real photographed/scanned score accuracy remains unverified.
