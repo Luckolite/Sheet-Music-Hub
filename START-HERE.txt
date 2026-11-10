@@ -6,5 +6,8 @@ Keep your existing library and settings. Closing the window keeps syncing in the
 In Music Sheets, open Syncing > Library Sync to pair your devices and Hub.
 Google linking needs your separately configured desktop OAuth client.
 
+Original Windows Hub materials: Copyright 2026 Luckolite. All rights reserved.
+Reuse terms: https://github.com/Luckolite/Sheet-Music-Hub/blob/main/COPYRIGHT.md
+
 Third-party notices are under Notices and within the worker runtime.
 Interpreter source: https://github.com/Luckolite/Sheet-Music-Interpreter/tree/d49783e606dabaf73feacbf00149b3aadbf9aad0

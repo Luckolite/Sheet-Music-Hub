@@ -2,6 +2,8 @@
 
 Optional Windows hub for Music Sheets android app. Keep a copy of your library on your PC, sync devices, and help process sheet interpretations on your locked/stay-cached sheets.
 
+The original Windows Hub is copyright © 2026 Luckolite. All rights reserved. See the [copyright notice](COPYRIGHT.md) for reuse terms and separately licensed components.
+
 General support:
 - Easy 🔄 synchronization across devices on the same local network
 - A PC copy of your sheets, images, tracks, and practice recordings
