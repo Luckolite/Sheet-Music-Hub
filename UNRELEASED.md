@@ -1,6 +1,11 @@
 # Unreleased changes
 
-Current local desktop deployment: Hub 1.6.182 with the matching recognition 140 page/audio worker (2026-11-08).
+Current local desktop deployment: Hub 1.6.187 with the matching recognition 144 page/audio worker (2026-11-10).
+
+- Sheet Reader and the Hub audio worker use the printed opening beat unit when an older saved BPM matches the printed number. In 6/8, a printed eighth-note tempo no longer plays as a dotted-quarter tempo. The Hub revisits earlier generated audio for scores with saved BPM.
+- Verified with 72 Hub self-tests and nine packaged compatibility pages. Music Sheets 1.18.561 is available through Library Host.
+
+Earlier local desktop deployment: Hub 1.6.182 with the matching recognition 140 page/audio worker (2026-11-08).
 
 - Personal Music Sheets can transcribe a local audio track into a melody-and-chord lead sheet using SheetSage on the paired desktop Hub. The encrypted transfer verifies audio and PDF hashes; generated pages append through the app's source-identity and state transaction guards.
 - An optional dedicated WSL2/Docker CPU worker runs separately from the OMR worker. Setup pins the upstream container digest and verifies all seven model assets against original upstream checksums, using a pinned public mirror because the original S3 model URLs return HTTP 403. The models remain external, under their upstream noncommercial license.
