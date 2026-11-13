@@ -1,6 +1,12 @@
 # Unreleased changes
 
-Current local desktop deployment: Hub 1.6.194 with the matching recognition 152 page worker (2026-11-13).
+Current local desktop deployment is Hub 1.6.195 with the matching recognition 153 page worker (2026-11-13).
+
+- Reduced raster work during staff, notehead, stem, and tuplet recognition. Guide 302 and audio 105 use their existing formats.
+- Passed 72 Hub self-tests and 12 packaged smoke pages, including the previous Library and Play contracts.
+- Music Sheets 1.18.576 (1049) installed and launched on the Android emulator. The Library APK and Hub offer match the signed build.
+
+Earlier local desktop deployment: Hub 1.6.194 with the matching recognition 152 page worker (2026-11-13).
 
 - Reduced repeated raster and staff-rule work during tie, slur, slide, beam, dynamics and articulation recognition. Printed common time, upper ledger noteheads and broken octave digits with a printed hook are also better recognized. Guide 302 and audio 105 retain their existing record layouts.
 - The desktop pair passed 72 Hub self-tests and 12 packaged smoke pages. The worker retains exact support for the preceding personal Library release and the published Play contract.
