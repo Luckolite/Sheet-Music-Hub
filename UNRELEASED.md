@@ -1,6 +1,12 @@
 # Unreleased changes
 
-Current local desktop deployment: Hub 1.6.187 with the matching recognition 144 page/audio worker (2026-11-10).
+Current local desktop deployment: Hub 1.6.194 with the matching recognition 152 page worker (2026-11-13).
+
+- Reduced repeated raster and staff-rule work during tie, slur, slide, beam, dynamics and articulation recognition. Printed common time, upper ledger noteheads and broken octave digits with a printed hook are also better recognized. Guide 302 and audio 105 retain their existing record layouts.
+- The desktop pair passed 72 Hub self-tests and 12 packaged smoke pages. The worker retains exact support for the preceding personal Library release and the published Play contract.
+- Music Sheets 1.18.575 (1048) installed and launched on the Android emulator. The Library HTTPS download and the Hub APK offer match the signed build.
+
+Earlier local desktop deployment: Hub 1.6.187 with the matching recognition 144 page/audio worker (2026-11-10).
 
 - Sheet Reader and the Hub audio worker use the printed opening beat unit when an older saved BPM matches the printed number. In 6/8, a printed eighth-note tempo no longer plays as a dotted-quarter tempo. The Hub revisits earlier generated audio for scores with saved BPM.
 - Verified with 72 Hub self-tests and nine packaged compatibility pages. Music Sheets 1.18.561 is available through Library Host.
