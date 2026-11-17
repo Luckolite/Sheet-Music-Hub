@@ -4,19 +4,18 @@ The Hub processes queued pages on your PC and syncs the results back to Music Sh
 The download includes its matching processor; keep `MusicSheetsNativePage` beside the EXE.
 From the app's Hub panel, pause processing, choose up to five workers, or retry pages.
 
-The deployed internal Hub 1.6.178 uses the matching recognition 137 page and
-audio worker, with Guide 299 and audio 101. Music Sheets 1.18.537 (code 1010)
-uses this contract and is available through Windows Library Host. The update improves tie
-ownership, short slurs near beams, opening measure rests and decimal tempo
-marks. See the [reviewed interpreter commit](https://github.com/Luckolite/Sheet-Music-Recognition/commit/08f8d983a403b7aea1e12eab2c670ba31f65704f).
+The deployed internal Hub 1.6.199 uses the matching recognition 158 page
+worker with Guide 308 and audio format 106. Music Sheets 1.18.580 (code 1053)
+uses this contract and is available through Windows Library Host. The update
+improves printed measure timing, note ownership and accidentals. Guide 308
+retains the natural-sharp mark through MusicXML export. See the
+[reviewed interpreter commit](https://github.com/Luckolite/Sheet-Music-Recognition/commit/a60e59daecebb299ddaba92af9d6ed2b555164f9).
 
 Keep the full `compat` folder with the matching processor. The worker selects
 the qualified bundle for each app contract. Original library data is shared
 while derived results stay isolated.
 
-The deployed pair passed 71 Hub self-tests and 12 packaged synthetic page
-checks. Installed hashes and successful revision 137 page publications verify
-the deployed pair. See [unreleased changes](../UNRELEASED.md) for the exact
+The deployed pair passed 72 Hub self-tests and nine packaged compatibility pages. Installed hashes and three isolated smoke pages verify the installed pair. See [unreleased changes](../UNRELEASED.md) for the exact
 qualification scope and prior deployments.
 
 "Ready on Hub" means the desktop has processed those pages for your app version.
