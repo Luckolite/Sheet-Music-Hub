@@ -1,6 +1,12 @@
 # Unreleased changes
 
-Current local desktop deployment is Hub 1.6.204 and the matching page worker with recognition 159, Guide 308, and audio 106 (2026-11-18).
+Current local desktop deployment is Hub 1.6.205 and the matching page worker from [Score Reader 0.1.7](https://github.com/Luckolite/Sheet-Music-Recognition/releases/tag/v0.1.7). The worker uses recognition 159, Guide 308, and audio 106 (2026-11-18).
+
+- Reuse raster and geometry work across recognition passes, including on pages with dense notation.
+- Passed 72 Hub self-tests, nine packaged compatibility pages, and three installed-worker smoke pages. Both retained dense pages reproduced their scores byte for byte.
+- Music Sheets 1.18.588 (1061) launched on the tablet emulator. The Library download and Hub update offer match the signed APK and its decoder matches the installed worker.
+
+Earlier local desktop deployment was Hub 1.6.204 and the matching page worker with recognition 159, Guide 308, and audio 106 (2026-11-18).
 
 - Reduce repeated raster work for staff rules, slurs, rests, octave signs, pedals, dynamics, and hairpins.
 - Passed 72 Hub self-tests, three current-worker smoke pages, nine Play/Dev/candidate compatibility pages, and three installed-worker smoke pages. Both retained dense pages reproduced their scores byte for byte.
