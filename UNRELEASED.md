@@ -1,6 +1,13 @@
 # Unreleased changes
 
-Current local desktop deployment is Hub 1.6.199 with recognition 158, Guide 308, and audio 106 (2026-11-17).
+Current local desktop deployment is Hub 1.6.203 and the matching page worker with recognition 159, Guide 308, and audio 106 (2026-11-18).
+
+- Reuse staff geometry and reduce repeated raster work for ties, barlines, rests, tremolos, articulations, and tuplets.
+- Passed 72 Hub self-tests, nine compatibility smoke pages, and three smoke pages through the installed pair. Two retained dense-page replays produced byte-identical scores.
+- Music Sheets 1.18.583 (1056) installed and cold-launched on the tablet emulator. The active Library download matches the signed APK and its decoder fingerprint matches the packaged worker.
+- The [standalone optimization batch](https://github.com/Luckolite/Sheet-Music-Recognition/commit/acfd8bc8b0df85c14326223153453b1f07338309) is published.
+
+Earlier local desktop deployment was Hub 1.6.199 with recognition 158, Guide 308, and audio 106 (2026-11-17).
 
 - Improved printed measure timing, fingerings, harmonics, and double-sharp and natural-sharp recognition. Guide 308 carries owned natural-sharp notation through processing and MusicXML export.
 - Passed 72 Hub self-tests, nine packaged checks across the current, prior Library, and Play compatibility contracts, plus three isolated installed-worker smoke pages.
