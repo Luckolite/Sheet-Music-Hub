@@ -1,6 +1,13 @@
 # Unreleased changes
 
-Current local desktop deployment is Hub 1.6.206 with the reviewed page worker. The worker uses recognition 159, Guide 308, and audio 106 (2026-11-18).
+Current local desktop deployment is Hub 1.6.207 with the reviewed page worker. The worker uses recognition 159, Guide 308, and audio 106 (2026-11-19).
+
+- Reuse raster checksums, staff and header geometry, and tremolo and barline evidence. Reduce unnecessary OCR setup on the Windows worker.
+- Passed 72 Hub self-tests, nine packaged compatibility pages, and three installed-worker smoke pages. Both retained scores reproduced byte for byte.
+- Music Sheets 1.18.590 (1063) launched on the tablet emulator. The Library download and Hub update offer match the signed APK and installed decoder.
+- The [standalone optimization batch](https://github.com/Luckolite/Sheet-Music-Recognition/commit/e5b64243) is on main.
+
+Earlier local desktop deployment was Hub 1.6.206 with the reviewed page worker. The worker uses recognition 159, Guide 308, and audio 106 (2026-11-18).
 
 - Share raster checksums and reduce repeated glyph, rest, slur, and tie scans. The worker reuses meter masks and dynamic glyph crops.
 - Passed 72 Hub self-tests, nine packaged compatibility pages, and three installed-worker smoke pages. Both retained scores reproduced byte for byte.
