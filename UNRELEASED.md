@@ -1,6 +1,14 @@
 # Unreleased changes
 
-Current local desktop deployment is Hub 1.6.207 with the reviewed page worker. The worker uses recognition 159, Guide 308, and audio 106 (2026-11-19).
+Current local desktop deployment is Hub 1.6.208 with the matching page worker. The worker uses recognition 160, Guide 308, and audio 106 (2026-11-19).
+
+- Recognize larger coda signs and distinguish the To Coda instruction from its destination. Play single-note tremolo when a score jump clips its interval.
+- Retry repeated audio failures less often while the inputs stay the same. Retry promptly when the inputs change.
+- Passed 72 Hub self-tests, nine packaged compatibility pages, and three installed-worker smoke pages.
+- Music Sheets 1.18.593 (1066) installed and opened on the tablet emulator. An authenticated automatic sync completed during receiver cooldown. The Library download and live Hub offer match the signed APK.
+- The standalone coda fixes passed Windows and Linux CI. [Standalone coda fixes](https://github.com/Luckolite/Sheet-Music-Recognition/commit/35332380db29101f7b73e67749f826aa9a753412)
+
+Earlier local desktop deployment was Hub 1.6.207 with the reviewed page worker. The worker uses recognition 159, Guide 308, and audio 106 (2026-11-19).
 
 - Reuse raster checksums, staff and header geometry, and tremolo and barline evidence. Reduce unnecessary OCR setup on the Windows worker.
 - Passed 72 Hub self-tests, nine packaged compatibility pages, and three installed-worker smoke pages. Both retained scores reproduced byte for byte.
