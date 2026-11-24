@@ -1,13 +1,20 @@
 # Unreleased changes
 
-Current local desktop deployment is Hub 1.6.211 with the matching page worker. The worker uses recognition 163, Guide 308, and audio 106 (2026-11-23).
+Current local desktop deployment is Hub 1.6.212 with the matching page worker. The worker uses recognition 164, Guide 309, and audio 106 (2026-11-24).
+
+- Recover missing notes in beamed octave and ledger groups, retain printed measure boundaries, and preserve flats, slurs, and fingerings on their written notes.
+- Guide 309 carries printed fingering groups, bow placement, and Fr.–M connectors into MusicXML while the Hub retains the previous Library, Play, and Dev worker contracts.
+- Passed 72 Hub self-tests and twelve packaged compatibility pages. Music Sheets 1.18.599 (1072) installed and launched on the emulator. The live Library download and Hub update offer match the signed APK.
+- The [standalone recognition updates](https://github.com/Luckolite/Sheet-Music-Recognition/commit/9efd049596b765e9a6a3b301b54c2813f238f5d0) are on main.
+
+The previous local desktop deployment was Hub 1.6.211 with the matching page worker. The worker uses recognition 163, Guide 308, and audio 106 (2026-11-23).
 
 - Keep long printed octave lines with the correct notes through intervening notation and stop at the printed end.
 - Music Sheets 1.18.598 (1071) makes note letters and finger numbers easier to read and saves note edits and labels together.
 - The signed APK launched on the emulator. Library and Hub serve the same APK. Passed 72 Hub self-tests, nine packaged compatibility pages, and three installed-worker smoke pages.
 - The [standalone octave-line update](https://github.com/Luckolite/Sheet-Music-Recognition/actions/runs/44980792907) passed Windows and Linux CI.
 
-The previous local desktop deployment was Hub 1.6.210 with the matching page worker. The worker uses recognition 162, Guide 308, and audio 106 (2026-11-21).
+Earlier local desktop deployment was Hub 1.6.210 with the matching page worker. The worker uses recognition 162, Guide 308, and audio 106 (2026-11-21).
 
 - Keep dotted octave lines attached to the correct staff through slur crossings and end them at the printed hook.
 - Keep parenthesized fingerings out of playback, recover barlines near fingering guides, and preserve wrapped 6/4 bars. Ignore harmonic stems where they resemble barlines.
