@@ -1,6 +1,14 @@
 # Unreleased changes
 
-Current local desktop deployment is Hub 1.6.212 with the matching page worker. The worker uses recognition 164, Guide 309, and audio 106 (2026-11-24).
+Current local desktop deployment is Hub 1.6.213 with the matching page worker. The worker uses recognition 168, Guide 311, and audio 106 (2026-11-25).
+
+- Restore printed fingerings obscured by staff rules, preserve fingerings beside grouped endpoints, and recover beamed and ledger-note rhythms.
+- Reuse page-level beam, rest, and tuplet work. The Android app also reduces segmentation and OCR work.
+- Music Sheets 1.18.600 (1073) adds the live Sheet Reader scanner and reduces repeated or crowded notation labels.
+- The signed APK launched on the Galaxy tablet. The Library download and Hub update offer match the APK. Packaged compatibility checks cover both previous Library contracts, Play, Dev, and the current worker.
+- The [standalone recognition and reader changes](https://github.com/Luckolite/Sheet-Music-Recognition/commit/137c119d9d55495c0c5fae3ca465653981f4da6e) are on main.
+
+The previous local desktop deployment was Hub 1.6.212 with the matching page worker. The worker uses recognition 164, Guide 309, and audio 106 (2026-11-24).
 
 - Recover missing notes in beamed octave and ledger groups, retain printed measure boundaries, and preserve flats, slurs, and fingerings on their written notes.
 - Guide 309 carries printed fingering groups, bow placement, and Fr.–M connectors into MusicXML while the Hub retains the previous Library, Play, and Dev worker contracts.
